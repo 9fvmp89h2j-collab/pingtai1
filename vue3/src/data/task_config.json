@@ -1,0 +1,42 @@
+{
+  "dailyTasks": [
+    {
+      "id": "read_story",
+      "title": "阅读一个针灸小故事",
+      "type": "故事任务",
+      "description": "去故事竹林读完一个小故事，并回答故事后的问题。",
+      "rewards": [
+        { "name": "竹简碎片", "count": 3 },
+        { "name": "杏仁", "count": 2 }
+      ]
+    },
+    {
+      "id": "light_acupoints",
+      "title": "点亮 3 个穴位星点",
+      "type": "穴位任务",
+      "description": "跟着小铜人老师认识 3 个穴位的位置。",
+      "rewards": [
+        { "name": "穴位星珠", "count": 3 },
+        { "name": "铜片", "count": 1 }
+      ]
+    },
+    {
+      "id": "safety_quiz",
+      "title": "完成 3 道安全判断题",
+      "type": "安全任务",
+      "description": "听安全铃铛提醒，判断哪些行为可以做。",
+      "rewards": [
+        { "name": "安全铃铛", "count": 1 },
+        { "name": "艾绒", "count": 1 }
+      ]
+    }
+  ],
+  "mapNodes": [
+    { "id": "story", "name": "故事竹林", "route": "/doctor-story", "requiredLevel": 1 },
+    { "id": "body", "name": "身体山谷", "route": "/shuxue", "requiredLevel": 1 },
+    { "id": "meridian", "name": "经络星河", "route": "/jingluo", "requiredLevel": 1 },
+    { "id": "copper", "name": "小铜人馆", "route": "/shuxue", "requiredLevel": 1 },
+    { "id": "safety", "name": "艾草安全屋", "route": "/quiz-game", "requiredLevel": 1 },
+    { "id": "clinic", "name": "杏林小医馆", "route": "/myworld", "requiredLevel": 1 }
+  ]
+}

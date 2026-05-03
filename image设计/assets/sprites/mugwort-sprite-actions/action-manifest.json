@@ -1,0 +1,15 @@
+{
+  "name": "mugwort-sprite-actions",
+  "label": "Mugwort Sprite Actions",
+  "style": "Xinglin Valley Q-version children's picture-book game character",
+  "sheet": "action-sheet.png",
+  "raw": "raw-sheet.png",
+  "actions": {
+    "stand-smile": "stand-smile.png",
+    "wave-welcome": "wave-welcome.png",
+    "explain-herb-pouch": "explain-herb-pouch.png",
+    "safety-reminder": "safety-reminder.png",
+    "offer-reward": "offer-reward.png",
+    "happy-encourage": "happy-encourage.png"
+  }
+}

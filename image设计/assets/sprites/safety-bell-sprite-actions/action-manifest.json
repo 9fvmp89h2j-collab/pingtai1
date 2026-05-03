@@ -1,0 +1,15 @@
+{
+  "name": "safety-bell-sprite-actions",
+  "label": "Safety Bell Sprite Actions",
+  "style": "Xinglin Valley Q-version children's picture-book game character",
+  "sheet": "action-sheet.png",
+  "raw": "raw-sheet.png",
+  "actions": {
+    "stand-smile": "stand-smile.png",
+    "wave-welcome": "wave-welcome.png",
+    "safety-sign": "safety-sign.png",
+    "attention-reminder": "attention-reminder.png",
+    "happy-encourage": "happy-encourage.png",
+    "guardian-shield": "guardian-shield.png"
+  }
+}

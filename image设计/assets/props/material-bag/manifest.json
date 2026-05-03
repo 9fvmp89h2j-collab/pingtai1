@@ -1,0 +1,37 @@
+{
+  "name": "material-bag-props",
+  "style": "Q-version rounded child-friendly Xinglin Valley item icons",
+  "palette": [
+    "pale green",
+    "ivory",
+    "apricot",
+    "pale gold"
+  ],
+  "items": {
+    "mugwort": {
+      "label": "艾草",
+      "png": "mugwort/prop.png",
+      "raw": "mugwort/raw.png"
+    },
+    "bamboo-slip": {
+      "label": "竹简",
+      "png": "bamboo-slip/prop.png",
+      "raw": "bamboo-slip/raw.png"
+    },
+    "copper-needle-model": {
+      "label": "铜针模型",
+      "png": "copper-needle-model/prop.png",
+      "raw": "copper-needle-model/raw.png"
+    },
+    "safety-bell": {
+      "label": "安全铃铛",
+      "png": "safety-bell/prop.png",
+      "raw": "safety-bell/raw.png"
+    },
+    "badge": {
+      "label": "徽章",
+      "png": "badge/prop.png",
+      "raw": "badge/raw.png"
+    }
+  }
+}

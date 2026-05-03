@@ -1,0 +1,344 @@
+{
+  "target": "npc",
+  "mode": "action",
+  "prompt": "",
+  "role": "",
+  "input": "D:\\\u603b\\Pediatric Acupuncture Education System\\pingtai1\\image\u8bbe\u8ba1\\assets\\sprites\\clinic-grandpa\\raw-sheet.png",
+  "threshold": 85,
+  "edge_threshold": 50,
+  "duration": 200,
+  "rows": 2,
+  "cols": 4,
+  "cell_size": 384,
+  "fit_scale": 0.78,
+  "trim_border": 4,
+  "edge_clean_depth": 4,
+  "align": "bottom",
+  "shared_scale": true,
+  "component_mode": "largest",
+  "component_padding": 24,
+  "min_component_area": 1,
+  "edge_touch_margin": 3,
+  "frame_labels": [
+    "grandpa-1",
+    "grandpa-2",
+    "grandpa-3",
+    "grandpa-4",
+    "grandpa-5",
+    "grandpa-6",
+    "grandpa-7",
+    "grandpa-8"
+  ],
+  "frames": [
+    {
+      "grid": [
+        0,
+        0
+      ],
+      "source_box": [
+        0,
+        0,
+        443,
+        443
+      ],
+      "component_mode": "largest",
+      "component_count": 1,
+      "selected_component_area": 45782,
+      "selected_component_bbox": [
+        145,
+        37,
+        319,
+        400
+      ],
+      "crop_bbox": [
+        121,
+        13,
+        343,
+        424
+      ],
+      "edge_touch": false,
+      "output_size": [
+        160,
+        296
+      ],
+      "paste_position": [
+        112,
+        46
+      ]
+    },
+    {
+      "grid": [
+        0,
+        1
+      ],
+      "source_box": [
+        443,
+        0,
+        886,
+        443
+      ],
+      "component_mode": "largest",
+      "component_count": 1,
+      "selected_component_area": 51546,
+      "selected_component_bbox": [
+        77,
+        40,
+        301,
+        407
+      ],
+      "crop_bbox": [
+        53,
+        16,
+        325,
+        431
+      ],
+      "edge_touch": false,
+      "output_size": [
+        196,
+        299
+      ],
+      "paste_position": [
+        94,
+        43
+      ]
+    },
+    {
+      "grid": [
+        0,
+        2
+      ],
+      "source_box": [
+        886,
+        0,
+        1329,
+        443
+      ],
+      "component_mode": "largest",
+      "component_count": 1,
+      "selected_component_area": 56529,
+      "selected_component_bbox": [
+        26,
+        40,
+        297,
+        407
+      ],
+      "crop_bbox": [
+        2,
+        16,
+        321,
+        431
+      ],
+      "edge_touch": true,
+      "output_size": [
+        230,
+        299
+      ],
+      "paste_position": [
+        77,
+        43
+      ]
+    },
+    {
+      "grid": [
+        0,
+        3
+      ],
+      "source_box": [
+        1329,
+        0,
+        1772,
+        443
+      ],
+      "component_mode": "largest",
+      "component_count": 1,
+      "selected_component_area": 51658,
+      "selected_component_bbox": [
+        93,
+        43,
+        318,
+        404
+      ],
+      "crop_bbox": [
+        69,
+        19,
+        342,
+        428
+      ],
+      "edge_touch": false,
+      "output_size": [
+        197,
+        295
+      ],
+      "paste_position": [
+        93,
+        47
+      ]
+    },
+    {
+      "grid": [
+        1,
+        0
+      ],
+      "source_box": [
+        0,
+        443,
+        443,
+        886
+      ],
+      "component_mode": "largest",
+      "component_count": 1,
+      "selected_component_area": 49179,
+      "selected_component_bbox": [
+        140,
+        20,
+        338,
+        381
+      ],
+      "crop_bbox": [
+        116,
+        0,
+        362,
+        405
+      ],
+      "edge_touch": true,
+      "output_size": [
+        177,
+        292
+      ],
+      "paste_position": [
+        103,
+        50
+      ]
+    },
+    {
+      "grid": [
+        1,
+        1
+      ],
+      "source_box": [
+        443,
+        443,
+        886,
+        886
+      ],
+      "component_mode": "largest",
+      "component_count": 1,
+      "selected_component_area": 54139,
+      "selected_component_bbox": [
+        32,
+        18,
+        280,
+        380
+      ],
+      "crop_bbox": [
+        8,
+        0,
+        304,
+        404
+      ],
+      "edge_touch": true,
+      "output_size": [
+        213,
+        291
+      ],
+      "paste_position": [
+        85,
+        51
+      ]
+    },
+    {
+      "grid": [
+        1,
+        2
+      ],
+      "source_box": [
+        886,
+        443,
+        1329,
+        886
+      ],
+      "component_mode": "largest",
+      "component_count": 1,
+      "selected_component_area": 51336,
+      "selected_component_bbox": [
+        58,
+        20,
+        262,
+        383
+      ],
+      "crop_bbox": [
+        34,
+        0,
+        286,
+        407
+      ],
+      "edge_touch": true,
+      "output_size": [
+        181,
+        293
+      ],
+      "paste_position": [
+        101,
+        49
+      ]
+    },
+    {
+      "grid": [
+        1,
+        3
+      ],
+      "source_box": [
+        1329,
+        443,
+        1772,
+        886
+      ],
+      "component_mode": "largest",
+      "component_count": 1,
+      "selected_component_area": 48204,
+      "selected_component_bbox": [
+        78,
+        14,
+        256,
+        386
+      ],
+      "crop_bbox": [
+        54,
+        0,
+        280,
+        410
+      ],
+      "edge_touch": true,
+      "output_size": [
+        163,
+        295
+      ],
+      "paste_position": [
+        110,
+        47
+      ]
+    }
+  ],
+  "edge_touch_frames": [
+    [
+      0,
+      2
+    ],
+    [
+      1,
+      0
+    ],
+    [
+      1,
+      1
+    ],
+    [
+      1,
+      2
+    ],
+    [
+      1,
+      3
+    ]
+  ]
+}

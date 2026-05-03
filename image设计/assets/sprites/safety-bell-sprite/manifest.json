@@ -1,0 +1,8 @@
+{
+  "name": "safety-bell-sprite",
+  "label": "Safety Bell Sprite",
+  "style": "Xinglin Valley Q-version children's picture-book game character",
+  "type": "core-safety-helper-character",
+  "png": "safety-bell-sprite.png",
+  "raw": "raw.png"
+}

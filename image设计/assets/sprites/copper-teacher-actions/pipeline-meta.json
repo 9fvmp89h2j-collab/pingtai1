@@ -1,0 +1,270 @@
+{
+  "target": "npc",
+  "mode": "action",
+  "prompt": "",
+  "role": "",
+  "input": "D:\\\u603b\\Pediatric Acupuncture Education System\\pingtai1\\image\u8bbe\u8ba1\\assets\\sprites\\copper-teacher-actions\\raw-sheet.png",
+  "threshold": 90,
+  "edge_threshold": 55,
+  "duration": 200,
+  "rows": 2,
+  "cols": 3,
+  "cell_size": 512,
+  "fit_scale": 0.84,
+  "trim_border": 4,
+  "edge_clean_depth": 5,
+  "align": "bottom",
+  "shared_scale": true,
+  "component_mode": "largest",
+  "component_padding": 24,
+  "min_component_area": 1,
+  "edge_touch_margin": 4,
+  "frame_labels": [
+    "copper-teacher-1",
+    "copper-teacher-2",
+    "copper-teacher-3",
+    "copper-teacher-4",
+    "copper-teacher-5",
+    "copper-teacher-6"
+  ],
+  "frames": [
+    {
+      "grid": [
+        0,
+        0
+      ],
+      "source_box": [
+        0,
+        0,
+        512,
+        512
+      ],
+      "component_mode": "largest",
+      "component_count": 1,
+      "selected_component_area": 64999,
+      "selected_component_bbox": [
+        186,
+        27,
+        405,
+        476
+      ],
+      "crop_bbox": [
+        162,
+        3,
+        429,
+        500
+      ],
+      "edge_touch": true,
+      "output_size": [
+        231,
+        430
+      ],
+      "paste_position": [
+        140,
+        42
+      ]
+    },
+    {
+      "grid": [
+        0,
+        1
+      ],
+      "source_box": [
+        512,
+        0,
+        1024,
+        512
+      ],
+      "component_mode": "largest",
+      "component_count": 1,
+      "selected_component_area": 74611,
+      "selected_component_bbox": [
+        94,
+        30,
+        368,
+        477
+      ],
+      "crop_bbox": [
+        70,
+        6,
+        392,
+        501
+      ],
+      "edge_touch": false,
+      "output_size": [
+        278,
+        428
+      ],
+      "paste_position": [
+        117,
+        44
+      ]
+    },
+    {
+      "grid": [
+        0,
+        2
+      ],
+      "source_box": [
+        1024,
+        0,
+        1536,
+        512
+      ],
+      "component_mode": "largest",
+      "component_count": 1,
+      "selected_component_area": 80010,
+      "selected_component_bbox": [
+        7,
+        35,
+        312,
+        482
+      ],
+      "crop_bbox": [
+        0,
+        11,
+        336,
+        504
+      ],
+      "edge_touch": true,
+      "output_size": [
+        290,
+        426
+      ],
+      "paste_position": [
+        111,
+        46
+      ]
+    },
+    {
+      "grid": [
+        1,
+        0
+      ],
+      "source_box": [
+        0,
+        512,
+        512,
+        1024
+      ],
+      "component_mode": "largest",
+      "component_count": 1,
+      "selected_component_area": 80392,
+      "selected_component_bbox": [
+        102,
+        5,
+        420,
+        455
+      ],
+      "crop_bbox": [
+        78,
+        0,
+        444,
+        479
+      ],
+      "edge_touch": true,
+      "output_size": [
+        316,
+        414
+      ],
+      "paste_position": [
+        98,
+        58
+      ]
+    },
+    {
+      "grid": [
+        1,
+        1
+      ],
+      "source_box": [
+        512,
+        512,
+        1024,
+        1024
+      ],
+      "component_mode": "largest",
+      "component_count": 1,
+      "selected_component_area": 74352,
+      "selected_component_bbox": [
+        117,
+        8,
+        374,
+        455
+      ],
+      "crop_bbox": [
+        93,
+        0,
+        398,
+        479
+      ],
+      "edge_touch": true,
+      "output_size": [
+        263,
+        414
+      ],
+      "paste_position": [
+        124,
+        58
+      ]
+    },
+    {
+      "grid": [
+        1,
+        2
+      ],
+      "source_box": [
+        1024,
+        512,
+        1536,
+        1024
+      ],
+      "component_mode": "largest",
+      "component_count": 1,
+      "selected_component_area": 79845,
+      "selected_component_bbox": [
+        31,
+        8,
+        326,
+        456
+      ],
+      "crop_bbox": [
+        7,
+        0,
+        350,
+        480
+      ],
+      "edge_touch": true,
+      "output_size": [
+        296,
+        415
+      ],
+      "paste_position": [
+        108,
+        57
+      ]
+    }
+  ],
+  "edge_touch_frames": [
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      2
+    ],
+    [
+      1,
+      0
+    ],
+    [
+      1,
+      1
+    ],
+    [
+      1,
+      2
+    ]
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "name": "mugwort-sprite",
+  "label": "Mugwort Sprite",
+  "style": "Xinglin Valley Q-version children's picture-book game character",
+  "type": "core-helper-character",
+  "png": "mugwort-sprite.png",
+  "raw": "raw.png"
+}
