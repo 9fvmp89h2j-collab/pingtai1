@@ -1,0 +1,39 @@
+{
+  "roles": {
+    "copperTeacher": {
+      "id": "copperTeacher",
+      "name": "小铜人老师",
+      "type": "core-guide",
+      "description": "负责穴位学习、3D 铜人互动、点击识别和闯关反馈。",
+      "defaultLine": "跟着我一起点亮身体里的穴位星图吧。"
+    },
+    "aiGrassSprite": {
+      "id": "aiGrassSprite",
+      "name": "艾草小精灵",
+      "type": "companion",
+      "description": "负责艾灸文化科普、安全知识和奖励反馈。",
+      "defaultLine": "记住哦，我们学习知识，但不能自己尝试针刺。"
+    },
+    "meridianCompass": {
+      "id": "meridianCompass",
+      "name": "星图罗盘",
+      "type": "navigation-tool",
+      "description": "负责经络路线引导、地图导航、任务解锁和章节进度展示。",
+      "defaultLine": "选择一颗星点，开始今天的经络探险。"
+    },
+    "mentorNpc": {
+      "id": "mentorNpc",
+      "name": "杏林爷爷",
+      "type": "story-npc",
+      "description": "负责讲述中医故事、发布主线任务和章节总结。",
+      "defaultLine": "杏林谷的星光变暗了，我们先去故事竹林看看吧。"
+    },
+    "safetyBell": {
+      "id": "safetyBell",
+      "name": "安全铃铛",
+      "type": "safety-reminder",
+      "description": "负责全局安全提醒、危险行为提示和安全边界说明。",
+      "defaultLine": "本系统只用于针灸文化科普和穴位认知。"
+    }
+  }
+}

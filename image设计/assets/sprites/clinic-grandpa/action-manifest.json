@@ -1,0 +1,17 @@
+{
+  "name": "clinic-grandpa",
+  "label": "clinic grandpa",
+  "style": "Xinglin Valley Q-version children's picture-book game character",
+  "sheet": "action-sheet.png",
+  "raw": "raw-sheet.png",
+  "actions": {
+    "stand-smile": "stand-smile.png",
+    "wave-welcome": "wave-welcome.png",
+    "explain-knowledge": "explain-knowledge.png",
+    "point-guide": "point-guide.png",
+    "offer-herb-pouch": "offer-herb-pouch.png",
+    "safety-sign": "safety-sign.png",
+    "happy-encourage": "happy-encourage.png",
+    "think-beard": "think-beard.png"
+  }
+}

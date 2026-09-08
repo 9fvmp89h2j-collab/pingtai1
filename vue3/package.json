@@ -1,0 +1,63 @@
+{
+  "name": "vue3",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite --mode development",
+    "build": "vite build --mode production",
+    "build:staging": "vite build --mode staging",
+    "validate:game": "node scripts/validate-game-consistency.mjs",
+    "validate:content": "node ../scripts/validate-copper-content.mjs",
+    "qa:body-map": "node scripts/body-map-qa.mjs",
+    "preview": "vite preview",
+    "lint": "eslint src --ext .vue,.js,.jsx,.cjs,.mjs --quiet",
+    "lint:fix": "npm run lint -- --fix"
+  },
+  "dependencies": {
+    "@ant-design/icons-vue": "^7.0.1",
+    "@fortawesome/fontawesome-free": "^7.1.0",
+    "@microsoft/fetch-event-source": "^2.0.1",
+    "ant-design-vue": "^4.0.0",
+    "axios": "^1.7.9",
+    "core-js": "^3.8.3",
+    "echarts": "^6.0.0",
+    "esbuild": "^0.25.11",
+    "html2canvas": "^1.4.1",
+    "marked": "^16.4.0",
+    "pinia": "^3.0.0",
+    "three": "^0.178.0",
+    "vue": "^3.2.13",
+    "vue-router": "^4.0.3",
+    "vuex": "^4.1.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.62.1",
+    "@vitejs/plugin-vue": "^4.6.2",
+    "eslint": "^8.57.0",
+    "eslint-plugin-vue": "^9.22.0",
+    "less": "^4.4.2",
+    "sass": "^1.89.2",
+    "unplugin-vue-components": "^32.1.0",
+    "vite": "^4.5.14"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/vue3-essential",
+      "eslint:recommended"
+    ],
+    "rules": {}
+  },
+  "eslintIgnore": [
+    "src/views/frontend/shunting/**"
+  ],
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "not ie 11"
+  ]
+}

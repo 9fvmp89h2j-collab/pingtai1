@@ -1,0 +1,60 @@
+# 编辑器配置
+.idea/
+.vscode/
+.claude/
+
+# Java / SpringBoot
+target/
+.m2/
+*.class
+*.jar
+*.war
+*.ear
+*.log
+logs/
+runtime/
+backups/
+release-audit-*/
+
+# Maven 本地工具包
+apache-maven-3.9.9-bin/
+apache-maven-3.9.9-bin.zip
+
+# Node / Vue
+node_modules/
+dist/
+.vite/
+.cache/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# 环境变量
+.env
+.env.local
+.env.*.local
+
+# 数据库运行日志
+mysql.err.log
+mysql.out.log
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# 本地审计、测试与导出产物
+output/
+audit-output/
+tmp/
+*.tar.gz
+
+# 本地数据库导出（可能包含用户数据）
+heritage_db.sql
+
+springboot/files/video/*.mp4
+# large video files
+springboot/files/video/*.mp4
+springboot\target\springboot-0.0.1-SNAPSHOT.jar
+springboot\files\video\1776849133516.mp4
+springboot\files\video\1775742040580.mp4

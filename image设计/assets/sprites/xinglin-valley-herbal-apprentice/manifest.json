@@ -1,0 +1,37 @@
+{
+  "name": "xinglin-valley-herbal-apprentice",
+  "display_name": "Xinglin Valley Little Herbal Apprentice",
+  "style": "16-bit retro pixel art",
+  "view": "3/4 top-down RPG overworld",
+  "anchor": "feet",
+  "palette": ["celadon green", "apricot", "ivory", "warm pale gold"],
+  "actions": {
+    "idle": {
+      "grid": "2x2",
+      "frames": 4,
+      "sheet": "idle/sheet-transparent.png",
+      "preview": "idle/animation.gif"
+    },
+    "walk": {
+      "grid": "4x4",
+      "frames": 16,
+      "row_order": ["down", "left", "right", "up"],
+      "sheet": "walk/sheet-transparent.png",
+      "preview": "walk/animation.gif"
+    },
+    "happy": {
+      "grid": "2x2",
+      "frames": 4,
+      "sheet": "happy/sheet-transparent.png",
+      "preview": "happy/animation.gif"
+    },
+    "point": {
+      "grid": "2x2",
+      "frames": 4,
+      "sheet": "point/sheet-transparent.png",
+      "preview": "point/animation.gif"
+    }
+  },
+  "overview": "overview-preview.png",
+  "notes": "Raw sheets used solid #FF00FF chroma key. Final sheets and extracted frames are transparent PNG assets."
+}

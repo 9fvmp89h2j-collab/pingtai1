@@ -1,0 +1,175 @@
+{
+  "target": "npc",
+  "mode": "happy",
+  "prompt": "",
+  "role": "",
+  "input": "assets\\sprites\\xinglin-valley-herbal-apprentice\\happy\\raw-sheet.png",
+  "threshold": 100,
+  "edge_threshold": 150,
+  "duration": 180,
+  "rows": 2,
+  "cols": 2,
+  "cell_size": 128,
+  "fit_scale": 0.85,
+  "trim_border": 4,
+  "edge_clean_depth": 3,
+  "align": "feet",
+  "shared_scale": true,
+  "component_mode": "largest",
+  "component_padding": 4,
+  "min_component_area": 1,
+  "edge_touch_margin": 0,
+  "frame_labels": [
+    "happy-1",
+    "happy-2",
+    "happy-3",
+    "happy-4"
+  ],
+  "frames": [
+    {
+      "grid": [
+        0,
+        0
+      ],
+      "source_box": [
+        0,
+        0,
+        627,
+        627
+      ],
+      "component_mode": "largest",
+      "component_count": 1,
+      "selected_component_area": 102630,
+      "selected_component_bbox": [
+        202,
+        81,
+        501,
+        586
+      ],
+      "crop_bbox": [
+        198,
+        77,
+        505,
+        590
+      ],
+      "edge_touch": false,
+      "output_size": [
+        65,
+        108
+      ],
+      "paste_position": [
+        31,
+        11
+      ]
+    },
+    {
+      "grid": [
+        0,
+        1
+      ],
+      "source_box": [
+        627,
+        0,
+        1254,
+        627
+      ],
+      "component_mode": "largest",
+      "component_count": 1,
+      "selected_component_area": 103160,
+      "selected_component_bbox": [
+        107,
+        72,
+        411,
+        572
+      ],
+      "crop_bbox": [
+        103,
+        68,
+        415,
+        576
+      ],
+      "edge_touch": false,
+      "output_size": [
+        66,
+        107
+      ],
+      "paste_position": [
+        31,
+        12
+      ]
+    },
+    {
+      "grid": [
+        1,
+        0
+      ],
+      "source_box": [
+        0,
+        627,
+        627,
+        1254
+      ],
+      "component_mode": "largest",
+      "component_count": 1,
+      "selected_component_area": 106799,
+      "selected_component_bbox": [
+        199,
+        33,
+        523,
+        534
+      ],
+      "crop_bbox": [
+        195,
+        29,
+        527,
+        538
+      ],
+      "edge_touch": false,
+      "output_size": [
+        70,
+        107
+      ],
+      "paste_position": [
+        29,
+        12
+      ]
+    },
+    {
+      "grid": [
+        1,
+        1
+      ],
+      "source_box": [
+        627,
+        627,
+        1254,
+        1254
+      ],
+      "component_mode": "largest",
+      "component_count": 1,
+      "selected_component_area": 102562,
+      "selected_component_bbox": [
+        112,
+        33,
+        411,
+        538
+      ],
+      "crop_bbox": [
+        108,
+        29,
+        415,
+        542
+      ],
+      "edge_touch": false,
+      "output_size": [
+        65,
+        108
+      ],
+      "paste_position": [
+        31,
+        11
+      ]
+    }
+  ],
+  "edge_touch_frames": []
+}

@@ -1,0 +1,19 @@
+Asset plan: npc / core guide character action bundle, 2x3 action sheet, clean HD children's picture-book game character style.
+
+Reference role:
+Use the existing Little Bronze Teacher standalone PNG as the visual reference. Preserve character identity, round face, big warm eyes, light copper/gold toy-bronze skin, ivory and pale sage teacher cape, apricot belt and tassels, subtle glowing point dots, and friendly guide personality.
+
+Prompt:
+Create a 2D character action sprite sheet for a children's traditional Chinese medicine acupuncture education website. Use the image just shown as the visual reference and preserve the same character identity: Little Bronze Teacher, same round face, same big warm eyes, same friendly smile, same light copper/gold toy-bronze skin, same curled forehead motif, same ivory and pale sage green teacher cape, same apricot belt and tassels, same soft dark warm outline, same rounded chibi proportions. This is the same character in every cell, only the pose and held teaching prop changes.
+
+Sheet layout: exactly 6 equal cells in a 2 rows x 3 columns grid, no borders, no dividers. Solid flat #FF00FF magenta background only. Same character identity, same outfit, same palette, same body scale in every cell. Full body visible in every cell, leave magenta margin on all sides, no part may touch or cross a cell edge.
+
+Actions by cell, left to right:
+Row 1 col 1: front standing smile, default pose, warm welcome expression.
+Row 1 col 2: waving welcome, one hand raised in a friendly wave, still holding a small blank bamboo slip or scroll in the other hand.
+Row 1 col 3: pointing to an acupuncture point chart for explanation, holding a small blank simplified body/acupoint diagram board with a few soft glowing dots and pointing at it; child-friendly, not anatomical, no text.
+Row 2 col 1: holding up a small blank task reminder sign, cheerful guide pose, no text on the sign.
+Row 2 col 2: happy encouragement / thumbs-up, brighter smile, one or both hands giving thumbs-up, "you did great" feeling.
+Row 2 col 3: safety reminder action, one hand raised gently like stop/reminder, holding a small rounded safety bell or blank safety card, protective and reassuring, not stern.
+
+Style constraints: warm Xinglin Valley children's picture-book + Q-version web game character style, clean small UI readability, rounded, friendly, light gold, pale copper, warm ivory, pale sage green, light apricot, soft beige. Only a few subtle glowing acupuncture point dots on the character body, small and gentle, not scary. No realistic anatomy, no medical model horror, no hospital look, no text, no labels, no UI, no speech bubbles, no background scene, no frame. The entire subject must fit fully inside each cell.

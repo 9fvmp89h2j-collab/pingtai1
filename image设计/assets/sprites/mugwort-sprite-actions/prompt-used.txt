@@ -1,0 +1,19 @@
+Asset plan: npc / helper character action bundle, 2x3 action sheet, clean HD children's picture-book game character style.
+
+Reference role:
+Use the existing Mugwort Sprite standalone PNG as the visual reference. Preserve character identity, round face, big warm eyes, leafy mugwort hair/hat silhouette, pale green cape, warm ivory outfit, herb pouch, soft green/apricot palette, and friendly healing personality.
+
+Prompt:
+Create a 2D character action sprite sheet for a children's traditional Chinese medicine acupuncture education website. Use the image just shown as the visual reference and preserve the same character identity: Mugwort Sprite, same round friendly face, same big warm eyes, same leafy mugwort hair/hat silhouette, same pale green leaf cape, same warm ivory outfit, same tiny herb pouch at the waist, same soft green and apricot palette, same rounded chibi proportions and soft outline. This is the same character in every cell, only the pose and held prop changes.
+
+Sheet layout: exactly 6 equal cells in a 2 rows x 3 columns grid, no borders, no dividers. Solid flat #FF00FF magenta background only. Same character identity, same face, same outfit, same palette, same body scale in every cell. Full body visible in every cell, leave magenta margin on all sides, no leaf tip, hand, pouch, prop, glow, or cape may touch or cross a cell edge.
+
+Actions by cell, left to right:
+Row 1 col 1: front standing smile, default pose, gentle healing expression.
+Row 1 col 2: waving welcome, one small hand raised in a friendly wave, cheerful and soft.
+Row 1 col 3: hugging a small mugwort herb pouch while explaining, one arm around the pouch and the other hand making a gentle teaching gesture, no text.
+Row 2 col 1: safety reminder action, one hand raised gently like stop/reminder, protective and reassuring, not stern; optional tiny rounded safety bell or leaf charm close to the body.
+Row 2 col 2: offering a small reward prop, holding out a tiny mugwort bundle or safe material bag with both hands, warm smile.
+Row 2 col 3: happy encouragement, brighter smile, both hands cheering or thumbs-up, child-friendly encouragement.
+
+Style constraints: warm Xinglin Valley children's picture-book + Q-version web game character style, natural, healing, safe, friendly, clean small UI readability. Palette: soft light green, fresh grass green, sage green, warm ivory, rice white, pale apricot, tiny pale gold highlights. No realistic botanical illustration, no scary forest spirit, no complex fairy wings, no dark colors, no text, no labels, no UI, no speech bubbles, no background scene, no frame. The entire subject must fit fully inside each cell.

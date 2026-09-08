@@ -1,0 +1,64 @@
+{
+  "target": "npc",
+  "mode": "single",
+  "prompt": "",
+  "role": "",
+  "input": "D:\\\u603b\\Pediatric Acupuncture Education System\\pingtai1\\image\u8bbe\u8ba1\\assets\\sprites\\copper-teacher\\raw.png",
+  "threshold": 95,
+  "edge_threshold": 60,
+  "duration": 200,
+  "rows": 1,
+  "cols": 1,
+  "cell_size": 512,
+  "fit_scale": 0.88,
+  "trim_border": 4,
+  "edge_clean_depth": 5,
+  "align": "bottom",
+  "shared_scale": false,
+  "component_mode": "largest",
+  "component_padding": 24,
+  "min_component_area": 1,
+  "edge_touch_margin": 4,
+  "frame_labels": [
+    "copper-teacher-1"
+  ],
+  "frames": [
+    {
+      "grid": [
+        0,
+        0
+      ],
+      "source_box": [
+        0,
+        0,
+        1254,
+        1254
+      ],
+      "component_mode": "largest",
+      "component_count": 1,
+      "selected_component_area": 364558,
+      "selected_component_bbox": [
+        315,
+        94,
+        929,
+        1133
+      ],
+      "crop_bbox": [
+        291,
+        70,
+        953,
+        1157
+      ],
+      "edge_touch": false,
+      "output_size": [
+        274,
+        450
+      ],
+      "paste_position": [
+        119,
+        32
+      ]
+    }
+  ],
+  "edge_touch_frames": []
+}

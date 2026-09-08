@@ -1,0 +1,11 @@
+{
+  "mainlineSource": "src/data/mainline.js",
+  "practiceTasks": [
+    "daily-read-copper-story",
+    "daily-light-hand-stars",
+    "daily-safety-quiz",
+    "meridian-match-*",
+    "meridian-sort-*",
+    "shunting-daily"
+  ]
+}

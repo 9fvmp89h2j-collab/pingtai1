@@ -1,0 +1,21 @@
+Asset plan: npc / character action bundle, 2x4 action sheet, clean HD children's picture-book game character style.
+
+Reference role:
+Use the existing Xinglin Valley herbal apprentice overview as the style reference: same rounded Q-version proportions, warm children's web-game palette, crisp outlines, and small UI readability. The new character is not the same person; he is an elderly clinic grandfather in the same world.
+
+Prompt:
+Create a 2D character action sprite sheet for a children's traditional Chinese medicine acupuncture education website. Use the image just shown as the visual style reference: same warm Xinglin Valley children's picture-book + Q-version web game character style, same rounded proportions, clean crisp outline, soft warm colors, readable small UI silhouette. Character identity: "clinic grandpa", a kind elderly grandfather in a warm herbal clinic, gentle teacher/storyteller. He is clearly elderly but cheerful and trustworthy: round friendly face, warm smile, kind eyes, silver-white hair, thick white eyebrows, small white moustache and short goatee beard. Outfit: simplified traditional Chinese herbal clinic long robe, warm ivory and light tan cloth, pale sage green trim, soft apricot sash, tiny medicine pouch or small gourd at waist. No hospital look, no realism, no scary old age, no stern expression.
+
+Sheet layout: exactly 8 equal cells in a 2 rows x 4 columns grid, no borders, no dividers. Solid flat #FF00FF magenta background only. Same character identity, same face, same outfit, same palette, same body scale in every cell. Full body visible in every cell, leave magenta margin on all sides, no part may touch or cross a cell edge.
+
+Actions by cell, left to right:
+Row 1 col 1: front standing smile, natural stance, default pose.
+Row 1 col 2: waving welcome, one hand raised in a friendly wave.
+Row 1 col 3: explaining knowledge, holding a small blank medical book or bamboo slip in one hand, other hand making a gentle teaching gesture.
+Row 1 col 4: pointing / guiding forward, one arm extended to guide children toward a medicine cabinet or task, friendly smile.
+Row 2 col 1: offering a small herbal material pouch or mugwort bag with both hands, task reward feeling.
+Row 2 col 2: holding up a small blank safety reminder sign, protective and reassuring, no text on the sign.
+Row 2 col 3: happy encouragement, brighter smile, both hands encouraging or thumbs-up, "you did great" feeling.
+Row 2 col 4: thinking / stroking beard, one hand gently touching beard, wise and cute.
+
+Style constraints: children's education web game character asset, rounded chibi proportions, soft dark brown outline, warm ivory, light tan, pale sage green, warm apricot, pale gold accents. Clean cartoon highlights, no heavy texture, no ink painting, no realistic ancient costume, no background scene, no text, no labels, no UI, no speech bubbles, no frame. The entire subject must fit fully inside each cell.

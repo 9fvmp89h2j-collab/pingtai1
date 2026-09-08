@@ -1,0 +1,19 @@
+Asset plan: npc / safety helper character action bundle, 2x3 action sheet, clean HD children's picture-book game character style.
+
+Reference role:
+Use the existing Safety Bell Sprite standalone PNG as the visual reference. Preserve character identity, plump rounded pale-gold bell body, warm friendly face, top ring, pale green leaf knot, ivory cape, tiny feet and hands, rounded shield motif, and protective gentle personality.
+
+Prompt:
+Create a 2D character action sprite sheet for a children's traditional Chinese medicine acupuncture education website. Use the image just shown as the visual reference and preserve the same character identity: Safety Bell Sprite, same plump rounded pale-gold bell body, same warm friendly face, same big caring eyes, same top ring, same pale green leaf knot, same ivory cape, same tiny feet and hands, same rounded shield motif on the bell body, same pale gold / warm apricot / ivory / pale green palette, same Q-version chibi proportions and soft warm outline. This is the same character in every cell, only the pose and held prop changes.
+
+Sheet layout: exactly 6 equal cells in a 2 rows x 3 columns grid, no borders, no dividers. Solid flat #FF00FF magenta background only. Same character identity, same face, same outfit, same palette, same body scale in every cell. Full body visible in every cell, leave magenta margin on all sides, no ring, wing, hand, shield, sign, glow, or cape may touch or cross a cell edge.
+
+Actions by cell, left to right:
+Row 1 col 1: front standing smile, default pose, gentle reassuring expression.
+Row 1 col 2: waving welcome, one small hand raised in a friendly wave, warm and inviting.
+Row 1 col 3: holding up a small blank safety reminder sign, no text, kind serious expression but not stern.
+Row 2 col 1: doing a "please pay attention" reminder gesture, one hand raised gently like stop/reminder, protective and soft.
+Row 2 col 2: happy encouragement, bright smile, both hands cheering or thumbs-up, friendly reward-page feeling.
+Row 2 col 3: guardian pose / unfolding a small rounded protective shield, gentle shield glow close to the body, reassuring and safe, not aggressive.
+
+Style constraints: warm Xinglin Valley children's picture-book + Q-version web game character style, safe, friendly, protective, clean small UI readability. Palette: pale gold, warm apricot, warm ivory, rice white, soft peach, pale sage green, tiny pale gold highlights. No antique brass, no temple bell, no religious feeling, no stern scolding, no dark colors, no text, no labels, no UI, no speech bubbles, no background scene, no frame. The entire subject must fit fully inside each cell.

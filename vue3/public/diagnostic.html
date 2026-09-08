@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>按钮位置诊断</title>
+<style>
+  body { margin: 0; padding: 20px; background: #333; font-family: sans-serif; color: #fff; }
+  h2 { margin: 0 0 10px; }
+  .stage {
+    position: relative;
+    width: 1280px; height: 640px;
+    border: 6px solid rgba(127,86,45,0.5);
+    border-radius: 20px;
+    background-image: url('home-map-rpg-v2.png');
+    background-size: 100% 100%;
+    margin: 0 auto;
+    box-shadow: 0 18px 0 rgba(105,74,38,0.22), 0 26px 44px rgba(55,76,49,0.22);
+  }
+  .btn {
+    position: absolute;
+    width: 108px; min-height: 110px;
+    display: grid; place-items: center;
+    text-align: center;
+    z-index: 6;
+  }
+  .badge {
+    width: 58px; height: 58px;
+    border-radius: 50%;
+    border: 4px solid #ead6a4;
+    background: linear-gradient(180deg, #f8d083, #b97934);
+    display: grid; place-items: center;
+    box-shadow: inset 0 0 0 3px rgba(93,58,25,0.26), 0 6px 0 rgba(96,64,31,0.2);
+  }
+  .badge i {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: #4f9575;
+    display: grid; place-items: center;
+    color: #fff9e3; font-size: 18px; font-weight: 900;
+    font-style: normal;
+  }
+  .label {
+    min-width: 104px; max-width: 128px;
+    padding: 5px 9px; margin-top: 6px;
+    border: 2px solid rgba(92,55,23,0.45);
+    border-radius: 8px;
+    background: linear-gradient(180deg, #f6d695, #c78949);
+    color: #4b3016; font-size: 13px; font-weight: 900;
+    box-shadow: inset 0 -4px 0 rgba(107,61,24,0.16), 0 4px 0 rgba(86,56,29,0.17);
+  }
+  .crosshair {
+    position: absolute;
+    width: 10px; height: 10px;
+    background: red;
+    border-radius: 50%;
+    z-index: 10;
+    transform: translate(-50%, -50%);
+  }
+  .coord-label {
+    position: absolute;
+    font-size: 10px; color: yellow;
+    background: rgba(0,0,0,0.7); padding: 1px 4px;
+    z-index: 11; white-space: nowrap;
+  }
+  .info { max-width: 1280px; margin: 10px auto; font-size: 13px; }
+  .info span { color: #0f0; }
+</style>
+</head>
+<body>
+<h2>按钮位置诊断 - 绿色框=当前按钮 红点=检出pad中心</h2>
+<div class="info">绿色框左上角 = 按钮 left/top | 红点 = 我检测到的圆形pad中心 | 黄色标签 = 按钮名称</div>
+<div class="stage" id="stage"></div>
+<div class="info">
+  <b>如果红点正好在按钮徽章中心</b>：坐标正确，重启服务器即可<br>
+  <b>如果红点偏离按钮徽章中心</b>：我的pad检测不对，需要重新计算<br>
+  <b>如果按钮完全不在绿色框内</b>：CSS问题，不是坐标问题
+</div>
+
+<script>
+const buttons = [
+  { id:'story', x:350, y:108, icon:'简', label:'针灸故事馆' },
+  { id:'clues', x:142, y:292, icon:'包', label:'线索包' },
+  { id:'body-map', x:141, y:526, icon:'身', label:'身体小地图' },
+  { id:'safety', x:855, y:142, icon:'铃', label:'安全小课堂' },
+  { id:'meridian', x:737, y:304, icon:'星', label:'经络星河' },
+  { id:'bronze-man', x:1029, y:307, icon:'馆', label:'小铜人互动馆' },
+  { id:'badges', x:1004, y:533, icon:'铜', label:'铜章角' },
+  { id:'repair', x:381, y:453, icon:'册', label:'星光修补册' },
+];
+
+const padCenters = [
+  { x:404, y:137, name:'story-pad' },
+  { x:909, y:171, name:'safety-pad' },
+  { x:791, y:333, name:'meridian-pad' },
+  { x:1083, y:336, name:'bronze-pad' },
+  { x:196, y:321, name:'clues-pad' },
+  { x:195, y:555, name:'body-pad' },
+  { x:1058, y:562, name:'badges-pad' },
+  { x:435, y:482, name:'repair-pad' },
+];
+
+const stage = document.getElementById('stage');
+
+// Draw buttons
+buttons.forEach(b => {
+  const div = document.createElement('div');
+  div.className = 'btn';
+  div.style.left = b.x + 'px';
+  div.style.top = b.y + 'px';
+  div.innerHTML = `
+    <div class="badge"><i>${b.icon}</i></div>
+    <div class="label">${b.label}</div>
+  `;
+  stage.appendChild(div);
+
+  // Yellow coord label
+  const lbl = document.createElement('div');
+  lbl.className = 'coord-label';
+  lbl.style.left = b.x + 'px';
+  lbl.style.top = (b.y - 14) + 'px';
+  lbl.textContent = b.id + '(' + b.x + ',' + b.y + ')';
+  stage.appendChild(lbl);
+});
+
+// Draw pad center crosshairs
+padCenters.forEach(p => {
+  const ch = document.createElement('div');
+  ch.className = 'crosshair';
+  ch.style.left = p.x + 'px';
+  ch.style.top = p.y + 'px';
+  ch.title = p.name;
+
+  const lbl = document.createElement('div');
+  lbl.className = 'coord-label';
+  lbl.style.left = (p.x + 8) + 'px';
+  lbl.style.top = (p.y - 8) + 'px';
+  lbl.style.color = '#f88';
+  lbl.textContent = p.name + '(' + p.x + ',' + p.y + ')';
+
+  stage.appendChild(ch);
+  stage.appendChild(lbl);
+});
+</script>
+</body>
+</html>

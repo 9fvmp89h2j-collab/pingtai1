@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>首页地图点位校准工具</title>
+<style>
+*{box-sizing:border-box}
+html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#172019;color:#fdf4d7;font-family:"Microsoft YaHei","Noto Sans SC",Arial,sans-serif}
+button,select,textarea{font:inherit}
+.app{display:grid;grid-template-columns:1fr 360px;height:100vh}
+.workspace{display:grid;grid-template-rows:auto 1fr auto;min-width:0}
+.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:10px 14px;background:#223226;border-bottom:1px solid rgba(255,244,215,.18)}
+.toolbar label{font-size:13px;color:#d9c99c}
+.toolbar select,.toolbar button{min-height:36px;border:1px solid rgba(255,244,215,.22);border-radius:8px;background:#2c4432;color:#fff4d7}
+.toolbar select{padding:0 10px;min-width:180px}
+.toolbar button{padding:0 12px;cursor:pointer;font-weight:800}
+.toolbar button.primary{background:#c8894a;color:#fff9e8;border-color:#e6b878}
+.coord{font-family:Consolas,monospace;color:#d9c99c}
+.coord b{color:#ffd45d;font-size:18px}
+.stage-scroll{overflow:auto;padding:18px;background:linear-gradient(135deg,#1a2a1f,#273b2c)}
+.stage{position:relative;width:1280px;height:720px;margin:0 auto;border:6px solid rgba(211,170,94,.62);border-radius:18px;background:url("home-map-rpg-v3-six-main.png") center/100% 100% no-repeat;box-shadow:0 18px 36px rgba(0,0,0,.38);touch-action:none}
+.pin{position:absolute;display:grid;place-items:center;width:120px;min-height:118px;padding:0;border:0;background:transparent;color:#3c2c18;cursor:grab;filter:drop-shadow(0 10px 9px rgba(61,45,27,.25));user-select:none;touch-action:none}
+.pin.drag{cursor:grabbing;z-index:30}
+.pin.active{outline:3px dashed #ffdf67;outline-offset:8px;border-radius:12px;z-index:20}
+.pin .ring{position:absolute;top:34px;left:50%;width:96px;height:30px;border:2px solid rgba(255,228,117,.92);border-radius:50%;background:radial-gradient(ellipse,rgba(255,247,181,.5),rgba(255,228,117,.08) 65%,transparent 66%);transform:translateX(-50%);pointer-events:none}
+.pin .badge{position:relative;z-index:2;display:grid;width:58px;height:58px;place-items:center;border:4px solid #ead6a4;border-radius:50%;background:linear-gradient(180deg,#f8d083,#b97934);box-shadow:inset 0 0 0 3px rgba(93,58,25,.26),0 6px 0 rgba(96,64,31,.2)}
+.pin .badge i{display:grid;width:38px;height:38px;place-items:center;border-radius:50%;background:#4f9575;color:#fff9e3;font-size:17px;font-style:normal;font-weight:900}
+.pin .seal{position:absolute;top:2px;right:15px;z-index:4;display:grid;width:28px;height:28px;place-items:center;border:2px solid rgba(255,246,219,.85);border-radius:50%;background:#c86d43;color:#fff7df;font-size:12px;font-weight:900}
+.pin .label{position:relative;z-index:3;display:block;min-width:104px;max-width:126px;margin:-2px auto 0;padding:6px 8px;border:2px solid rgba(92,55,23,.45);border-radius:8px;background:linear-gradient(180deg,#f6d695,#c78949);box-shadow:inset 0 -4px 0 rgba(107,61,24,.16),0 4px 0 rgba(86,56,29,.17);color:#4b3016;font-size:13px;font-weight:900;line-height:1.12;text-align:center}
+.pin .status{position:relative;z-index:3;display:inline-block;margin-top:5px;padding:3px 9px;border-radius:999px;background:rgba(255,249,226,.92);color:#536246;font-size:11px;font-weight:900}
+.cross{position:absolute;z-index:35;width:12px;height:12px;margin:-6px 0 0 -6px;border:2px solid #fff;border-radius:50%;background:#ff3b30;box-shadow:0 0 0 3px rgba(255,59,48,.25);pointer-events:none}
+.player{position:absolute;z-index:24;width:76px;height:76px;background:url("/assets/apprentice/walk-sheet.png") 0 0/304px 304px no-repeat;filter:drop-shadow(0 8px 0 rgba(45,62,43,.22));cursor:grab;touch-action:none}
+.player.active{outline:3px dashed #5a8dee;outline-offset:5px;border-radius:12px}
+.player::after{content:"小药师";position:absolute;left:50%;bottom:-20px;transform:translateX(-50%);padding:2px 8px;border-radius:999px;background:rgba(255,249,226,.92);color:#3f321f;font-size:12px;font-weight:900;white-space:nowrap}
+.foot{padding:8px 14px;background:#223226;border-top:1px solid rgba(255,244,215,.18);color:#d9c99c;font-size:13px}
+kbd{padding:1px 6px;border-radius:4px;background:#40523f;color:#fff4d7}
+.panel{display:grid;grid-template-rows:auto auto 1fr auto;gap:12px;padding:16px;background:#f8edcf;color:#3f321f;border-left:6px solid #b98745;overflow:auto}
+.panel h1{margin:0;color:#2f6a52;font-size:22px}
+.panel p{margin:4px 0 0;color:#6a5839;font-size:13px;line-height:1.55}
+.list{display:grid;gap:8px}
+.item{display:grid;grid-template-columns:34px 1fr auto;gap:8px;align-items:center;padding:8px;border:2px solid rgba(122,83,43,.16);border-radius:10px;background:#fff8df;cursor:pointer}
+.item.active{border-color:#c8894a;box-shadow:0 0 0 3px rgba(200,137,74,.16)}
+.item span{display:grid;width:30px;height:30px;place-items:center;border-radius:8px;background:#4f9575;color:#fff9e3;font-weight:900}
+.item strong{display:block;font-size:13px}
+.item em{display:block;color:#7a6a4e;font-size:12px;font-style:normal}
+.item code{font-size:12px;color:#9a632c}
+textarea{width:100%;min-height:220px;resize:vertical;padding:10px;border:2px solid rgba(122,83,43,.18);border-radius:10px;background:#fffdf2;color:#3f321f;font-family:Consolas,monospace;font-size:12px;line-height:1.5}
+.panel-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.panel-actions button{min-height:40px;border:0;border-radius:10px;background:#2f6a52;color:#fff9e8;cursor:pointer;font-weight:900}
+.panel-actions button.secondary{background:#c8894a}
+@media(max-width:1100px){.app{grid-template-columns:1fr}.panel{height:44vh;border-left:0;border-top:6px solid #b98745}.stage-scroll{padding:10px}}
+</style>
+</head>
+<body>
+<main class="app">
+  <section class="workspace">
+    <div class="toolbar">
+      <label for="target">当前点位</label>
+      <select id="target"></select>
+      <span class="coord">left/top: (<b id="leftValue">0</b>, <b id="topValue">0</b>)</span>
+      <span class="coord">徽章中心: (<b id="centerX">0</b>, <b id="centerY">0</b>)</span>
+      <button class="primary" id="copyLevels">复制关卡坐标</button>
+      <button id="copyPlayer">复制小药师坐标</button>
+      <button id="reset">还原默认</button>
+    </div>
+    <div class="stage-scroll">
+      <div class="stage" id="stage"></div>
+    </div>
+    <div class="foot">
+      拖动按钮或小药师调整位置；点击地图会移动当前选中点位。<kbd>方向键</kbd> 微调 1px，<kbd>Shift + 方向键</kbd> 微调 10px。红点是按钮徽章中心。
+    </div>
+  </section>
+  <aside class="panel">
+    <div>
+      <h1>首页地图点位校准</h1>
+      <p>把六个按钮拖到你截图中对应的圆形落点上。完成后复制右侧坐标，发给我或直接替换到 HomeMap.vue。</p>
+    </div>
+    <div class="list" id="list"></div>
+    <textarea id="output" spellcheck="false"></textarea>
+    <div class="panel-actions">
+      <button id="saveLocal">保存到本机</button>
+      <button class="secondary" id="clearLocal">清除保存</button>
+    </div>
+  </aside>
+</main>
+
+<script>
+const MAP_WIDTH = 1280
+const MAP_HEIGHT = 720
+const BADGE_CENTER = { x: 54, y: 31 }
+const PLAYER_SIZE = { w: 76, h: 76 }
+const STORAGE_KEY = 'home-map-calibration-v3'
+
+const defaults = {
+  player: { x: 570, y: 560 },
+  levels: [
+    { id: 'story', label: '针灸故事馆', icon: '简', seal: '新', statusText: '进行中', x: 308, y: 178 },
+    { id: 'body-valley', label: '身体山谷', icon: '身', seal: '成', statusText: '已完成', x: 162, y: 466 },
+    { id: 'meridian', label: '经络星河', icon: '星', seal: '锁', statusText: '未解锁', x: 620, y: 212 },
+    { id: 'bronze-man', label: '小铜人馆', icon: '铜', seal: '修', statusText: '需修补', x: 930, y: 318 },
+    { id: 'clinic', label: '杏林小医馆', icon: '杏', seal: '学', statusText: '可探索', x: 878, y: 112 },
+    { id: 'badges', label: '勋章墙', icon: '章', seal: '星', statusText: '已完成', x: 1028, y: 518 }
+  ]
+}
+
+let data = loadState()
+let selected = 'story'
+let pins = new Map()
+
+const stage = document.getElementById('stage')
+const target = document.getElementById('target')
+const list = document.getElementById('list')
+const output = document.getElementById('output')
+const player = document.createElement('div')
+player.className = 'player'
+player.dataset.id = 'player'
+stage.appendChild(player)
+
+function loadState() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null')
+    if (saved?.levels?.length) return saved
+  } catch (_) {}
+  return JSON.parse(JSON.stringify(defaults))
+}
+
+function clamp(value, min, max) {
+  return Math.max(min, Math.min(max, Math.round(value)))
+}
+
+function render() {
+  target.innerHTML = ''
+  list.innerHTML = ''
+  data.levels.forEach((level) => {
+    const option = document.createElement('option')
+    option.value = level.id
+    option.textContent = level.label
+    target.appendChild(option)
+
+    const pin = document.createElement('button')
+    pin.type = 'button'
+    pin.className = 'pin'
+    pin.dataset.id = level.id
+    pin.innerHTML = `<span class="ring"></span><span class="badge"><i>${level.icon}</i></span><span class="seal">${level.seal}</span><strong class="label">${level.label}</strong><span class="status">${level.statusText}</span>`
+    stage.appendChild(pin)
+
+    const cross = document.createElement('span')
+    cross.className = 'cross'
+    stage.appendChild(cross)
+
+    pins.set(level.id, { level, pin, cross })
+    bindDrag(pin, level.id)
+
+    const item = document.createElement('button')
+    item.type = 'button'
+    item.className = 'item'
+    item.dataset.id = level.id
+    item.innerHTML = `<span>${level.icon}</span><div><strong>${level.label}</strong><em>${level.id}</em></div><code></code>`
+    item.addEventListener('click', () => select(level.id))
+    list.appendChild(item)
+  })
+
+  const playerOption = document.createElement('option')
+  playerOption.value = 'player'
+  playerOption.textContent = '小药师初始位置'
+  target.appendChild(playerOption)
+  bindDrag(player, 'player')
+  target.addEventListener('change', () => select(target.value))
+  stage.addEventListener('pointerdown', handleStagePointer)
+  document.addEventListener('keydown', handleKey)
+  select(selected)
+}
+
+function setPosition(id, x, y) {
+  if (id === 'player') {
+    data.player.x = clamp(x, 0, MAP_WIDTH - PLAYER_SIZE.w)
+    data.player.y = clamp(y, 0, MAP_HEIGHT - PLAYER_SIZE.h)
+  } else {
+    const level = data.levels.find((item) => item.id === id)
+    if (!level) return
+    level.x = clamp(x, -80, MAP_WIDTH - 40)
+    level.y = clamp(y, -80, MAP_HEIGHT - 40)
+  }
+  paint()
+}
+
+function paint() {
+  data.levels.forEach((level) => {
+    const item = pins.get(level.id)
+    item.pin.style.left = `${level.x}px`
+    item.pin.style.top = `${level.y}px`
+    item.pin.classList.toggle('active', selected === level.id)
+    item.cross.style.left = `${level.x + BADGE_CENTER.x}px`
+    item.cross.style.top = `${level.y + BADGE_CENTER.y}px`
+  })
+  player.style.left = `${data.player.x}px`
+  player.style.top = `${data.player.y}px`
+  player.classList.toggle('active', selected === 'player')
+  document.querySelectorAll('.item').forEach((item) => {
+    const level = data.levels.find((entry) => entry.id === item.dataset.id)
+    item.classList.toggle('active', item.dataset.id === selected)
+    item.querySelector('code').textContent = `${level.x}, ${level.y}`
+  })
+  target.value = selected
+  updateCoords()
+  updateOutput()
+}
+
+function select(id) {
+  selected = id
+  paint()
+}
+
+function updateCoords() {
+  if (selected === 'player') {
+    document.getElementById('leftValue').textContent = data.player.x
+    document.getElementById('topValue').textContent = data.player.y
+    document.getElementById('centerX').textContent = data.player.x + Math.round(PLAYER_SIZE.w / 2)
+    document.getElementById('centerY').textContent = data.player.y + Math.round(PLAYER_SIZE.h / 2)
+    return
+  }
+  const level = data.levels.find((item) => item.id === selected)
+  document.getElementById('leftValue').textContent = level.x
+  document.getElementById('topValue').textContent = level.y
+  document.getElementById('centerX').textContent = level.x + BADGE_CENTER.x
+  document.getElementById('centerY').textContent = level.y + BADGE_CENTER.y
+}
+
+function updateOutput() {
+  const lines = data.levels.map((level) => {
+    return `  { id: '${level.id}', x: ${level.x}, y: ${level.y} }, // ${level.label}, badge center (${level.x + BADGE_CENTER.x}, ${level.y + BADGE_CENTER.y})`
+  }).join('\n')
+  output.value = `// HomeMap.vue point calibration\nconst player = reactive({ x: ${data.player.x}, y: ${data.player.y}, direction: 'down', frame: 0, walking: false })\n\nconst levelPositions = [\n${lines}\n]`
+}
+
+function bindDrag(element, id) {
+  element.addEventListener('pointerdown', (event) => {
+    event.preventDefault()
+    event.stopPropagation()
+    select(id)
+    element.classList.add('drag')
+    const startX = event.clientX
+    const startY = event.clientY
+    const origin = getPosition(id)
+    function move(event) {
+      setPosition(id, origin.x + event.clientX - startX, origin.y + event.clientY - startY)
+    }
+    function up() {
+      element.classList.remove('drag')
+      document.removeEventListener('pointermove', move)
+      document.removeEventListener('pointerup', up)
+    }
+    document.addEventListener('pointermove', move)
+    document.addEventListener('pointerup', up)
+  })
+}
+
+function handleStagePointer(event) {
+  if (event.target !== stage) return
+  const rect = stage.getBoundingClientRect()
+  const x = (event.clientX - rect.left) * (MAP_WIDTH / rect.width)
+  const y = (event.clientY - rect.top) * (MAP_HEIGHT / rect.height)
+  if (selected === 'player') {
+    setPosition(selected, x - PLAYER_SIZE.w / 2, y - PLAYER_SIZE.h / 2)
+  } else {
+    setPosition(selected, x - BADGE_CENTER.x, y - BADGE_CENTER.y)
+  }
+}
+
+function getPosition(id) {
+  if (id === 'player') return data.player
+  return data.levels.find((item) => item.id === id)
+}
+
+function handleKey(event) {
+  if (!['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(event.key)) return
+  event.preventDefault()
+  const step = event.shiftKey ? 10 : 1
+  const pos = getPosition(selected)
+  const dx = event.key === 'ArrowLeft' ? -step : event.key === 'ArrowRight' ? step : 0
+  const dy = event.key === 'ArrowUp' ? -step : event.key === 'ArrowDown' ? step : 0
+  setPosition(selected, pos.x + dx, pos.y + dy)
+}
+
+function copyText(text, button, doneText) {
+  navigator.clipboard.writeText(text).then(() => {
+    const old = button.textContent
+    button.textContent = doneText
+    setTimeout(() => { button.textContent = old }, 1400)
+  })
+}
+
+document.getElementById('copyLevels').addEventListener('click', (event) => copyText(output.value, event.currentTarget, '已复制'))
+document.getElementById('copyPlayer').addEventListener('click', (event) => copyText(`const player = reactive({ x: ${data.player.x}, y: ${data.player.y}, direction: 'down', frame: 0, walking: false })`, event.currentTarget, '已复制'))
+document.getElementById('saveLocal').addEventListener('click', () => {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data))
+  alert('已保存到本机浏览器')
+})
+document.getElementById('clearLocal').addEventListener('click', () => {
+  localStorage.removeItem(STORAGE_KEY)
+  data = JSON.parse(JSON.stringify(defaults))
+  data.levels.forEach((level) => setPosition(level.id, level.x, level.y))
+  setPosition('player', data.player.x, data.player.y)
+  select('story')
+})
+document.getElementById('reset').addEventListener('click', () => {
+  data = JSON.parse(JSON.stringify(defaults))
+  data.levels.forEach((level) => setPosition(level.id, level.x, level.y))
+  setPosition('player', data.player.x, data.player.y)
+  select('story')
+})
+
+render()
+</script>
+</body>
+</html>

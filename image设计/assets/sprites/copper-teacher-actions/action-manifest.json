@@ -1,0 +1,15 @@
+{
+  "name": "copper-teacher-actions",
+  "label": "Little Bronze Teacher Actions",
+  "style": "Xinglin Valley Q-version children's picture-book game character",
+  "sheet": "action-sheet.png",
+  "raw": "raw-sheet.png",
+  "actions": {
+    "stand-smile": "stand-smile.png",
+    "wave-welcome": "wave-welcome.png",
+    "explain-acupoint-chart": "explain-acupoint-chart.png",
+    "task-sign": "task-sign.png",
+    "happy-thumbs-up": "happy-thumbs-up.png",
+    "safety-reminder": "safety-reminder.png"
+  }
+}

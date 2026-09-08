@@ -1,0 +1,11 @@
+{
+  "target": "asset",
+  "mode": "single",
+  "prompt": "copper teacher hero wave single transparent sprite",
+  "role": "",
+  "input": "output\\sprites\\copper-teacher-hero-wave\\raw.png",
+  "threshold": 80,
+  "edge_threshold": 130,
+  "duration": 200,
+  "single_size": 512
+}

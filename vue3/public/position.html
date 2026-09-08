@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>按钮定位工具</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;background:#1a1a1a;font-family:sans-serif;color:#fff}
+#top{display:flex;gap:12px;align-items:center;padding:10px 16px;background:#222;border-bottom:1px solid #333;z-index:10;flex-wrap:wrap}
+#top select{font-size:15px;padding:6px 10px;background:#333;color:#fff;border:1px solid #555;border-radius:4px}
+#top .coord{font-family:monospace;font-size:15px}
+#top .coord span{color:#ffd35a;font-weight:bold}
+#top button{padding:8px 18px;border-radius:6px;border:none;cursor:pointer;font-size:14px;font-weight:bold}
+#copy{background:#2f7d68;color:#fff}
+#reset{background:#555;color:#fff}
+#info{flex:1;text-align:right;font-size:12px;color:#888;min-width:200px}
+#mapwrap{flex:1;overflow:auto;display:flex;align-items:flex-start;justify-content:center;padding:20px}
+#map{position:relative;width:1280px;height:720px;background:url('home-map-raw-1782835337.png') 0 0/100% 100% no-repeat;flex-shrink:0}
+.pin{position:absolute;display:flex;flex-direction:column;align-items:center;width:120px;z-index:5;cursor:grab;user-select:none;-webkit-user-select:none}
+.pin.drag{cursor:grabbing;z-index:20;filter:brightness(1.15)}
+.pin.on{outline:3px dashed #ffd35a;outline-offset:5px;border-radius:6px;z-index:15}
+.pin .dot{width:64px;height:64px;border-radius:50%;border:4px solid #ead6a4;background:linear-gradient(180deg,#f8d083,#b97934);display:grid;place-items:center;box-shadow:inset 0 0 0 3px rgba(93,58,25,.26),0 6px 0 rgba(96,64,31,.2)}
+.pin .dot i{width:42px;height:42px;border-radius:50%;background:#4f9575;display:grid;place-items:center;color:#fff9e3;font-size:18px;font-weight:900;font-style:normal}
+.pin .tag{margin-top:6px;padding:5px 12px;border:2px solid rgba(92,55,23,.45);border-radius:8px;background:linear-gradient(180deg,#f6d695,#c78949);color:#4b3016;font-size:14px;font-weight:900;text-align:center;box-shadow:inset 0 -4px 0 rgba(107,61,24,.16),0 4px 0 rgba(86,56,29,.17);white-space:nowrap}
+.pin .xhair{position:absolute;top:33px;left:50%;width:10px;height:10px;margin-left:-5px;background:red;border:2px solid #fff;border-radius:50%;pointer-events:none}
+#tip{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.85);padding:8px 18px;border-radius:20px;font-size:13px;color:#aaa;white-space:nowrap}
+#tip kbd{background:#444;padding:1px 6px;border-radius:3px;color:#ddd}
+</style>
+</head>
+<body>
+
+<div id="top">
+  <label>选中:</label>
+  <select id="sel"></select>
+  <span class="coord">
+    &nbsp;按钮: (<span id="lx"></span>, <span id="ly"></span>)
+    &nbsp;准心: (<span id="cx"></span>, <span id="cy"></span>)
+  </span>
+  <button id="copy">📋 复制6个坐标</button>
+  <button id="reset">↺ 还原</button>
+  <span id="info">点地图移动 · 方向键 ±1px · Shift+方向键 ±10px · 拖拽精调</span>
+</div>
+
+<div id="mapwrap"><div id="map"></div></div>
+<div id="tip">把 <kbd>🔴</kbd> 对准圆形区域中心 → 切下一个 → 6个都对准后点 <kbd>📋 复制</kbd></div>
+
+<script>
+const BCX=60, BCY=33; // badge center relative to pin top-left
+
+const INIT=[
+  {id:'story',      label:'针灸故事馆', icon:'简', x:308, y:178},
+  {id:'body-valley',label:'身体山谷',   icon:'身', x:162, y:466},
+  {id:'meridian',   label:'经络星河',   icon:'星', x:620, y:212},
+  {id:'bronze-man', label:'小铜人馆',   icon:'铜', x:930, y:318},
+  {id:'clinic',     label:'杏林小医馆', icon:'杏', x:878, y:112},
+  {id:'badges',     label:'勋章墙',     icon:'章', x:1028,y:518},
+];
+
+let pins=[], cur=0;
+const map=document.getElementById('map'), sel=document.getElementById('sel');
+
+// Init
+INIT.forEach((d,i)=>{
+  const o=document.createElement('option'); o.value=i; o.textContent=d.label; sel.appendChild(o);
+  const el=document.createElement('div'); el.className='pin';
+  el.style.left=d.x+'px'; el.style.top=d.y+'px';
+  el.innerHTML='<div class="xhair"></div><div class="dot"><i>'+d.icon+'</i></div><div class="tag">'+d.label+'</div>';
+  map.appendChild(el);
+  pins.push({...d,el});
+});
+
+function upd(){
+  const p=pins[cur];
+  document.getElementById('lx').textContent=p.x;
+  document.getElementById('ly').textContent=p.y;
+  document.getElementById('cx').textContent=p.x+BCX;
+  document.getElementById('cy').textContent=p.y+BCY;
+}
+
+function move(i,x,y){
+  const p=pins[i];
+  p.x=Math.round(Math.max(-100,Math.min(1320,x)));
+  p.y=Math.round(Math.max(-100,Math.min(760,y)));
+  p.el.style.left=p.x+'px'; p.el.style.top=p.y+'px';
+  if(i===cur) upd();
+}
+
+function select(i){
+  pins.forEach(p=>p.el.classList.remove('on'));
+  cur=i; pins[i].el.classList.add('on'); sel.value=i; upd();
+}
+
+// Click map to move current pin
+map.addEventListener('click',e=>{
+  if(e.target!==map) return;
+  const r=map.getBoundingClientRect();
+  move(cur, e.clientX-r.left-BCX, e.clientY-r.top-BCY);
+});
+
+// Drag pins
+pins.forEach((p,i)=>{
+  p.el.addEventListener('pointerdown',e=>{
+    e.preventDefault(); e.stopPropagation();
+    select(i);
+    const sx=e.clientX, sy=e.clientY, ox=p.x, oy=p.y;
+    let moved=false;
+    p.el.classList.add('drag');
+    function mv(ev){
+      const dx=ev.clientX-sx, dy=ev.clientY-sy;
+      if(Math.abs(dx)>1||Math.abs(dy)>1) moved=true;
+      if(moved) move(i, Math.round(ox+dx), Math.round(oy+dy));
+    }
+    function up(){
+      p.el.classList.remove('drag');
+      document.removeEventListener('pointermove',mv);
+      document.removeEventListener('pointerup',up);
+    }
+    document.addEventListener('pointermove',mv);
+    document.addEventListener('pointerup',up);
+  });
+});
+
+// Keyboard
+document.addEventListener('keydown',e=>{
+  const step=e.shiftKey?10:1, p=pins[cur];
+  switch(e.key){
+    case 'ArrowUp':e.preventDefault();move(cur,p.x,p.y-step);break;
+    case 'ArrowDown':e.preventDefault();move(cur,p.x,p.y+step);break;
+    case 'ArrowLeft':e.preventDefault();move(cur,p.x-step,p.y);break;
+    case 'ArrowRight':e.preventDefault();move(cur,p.x+step,p.y);break;
+  }
+});
+
+sel.addEventListener('change',()=>select(+sel.value));
+
+document.getElementById('reset').addEventListener('click',()=>{
+  INIT.forEach((d,i)=>{ pins[i].x=d.x; pins[i].y=d.y; move(i,d.x,d.y); });
+  select(cur);
+});
+
+document.getElementById('copy').addEventListener('click',()=>{
+  const txt=pins.map(p=>"  { id: '"+p.id+"', x: "+p.x+", y: "+p.y+" },  // badge=("+(p.x+BCX)+","+(p.y+BCY)+")").join('\n');
+  navigator.clipboard.writeText('const levels = reactive([\n'+txt+'\n])').then(()=>{
+    const b=document.getElementById('copy'); b.textContent='✅ 已复制!'; setTimeout(()=>b.textContent='📋 复制6个坐标',1500);
+  });
+});
+
+select(0);
+</script>
+</body>
+</html>
