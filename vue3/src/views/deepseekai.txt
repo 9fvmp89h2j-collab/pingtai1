@@ -1,0 +1,71 @@
+二、SpringBoot 项目中接入流程
+1. 添加依赖（推荐使用 Hutool 辅助请求）
+<!-- hutool 工具包，简化 http 请求 -->
+<dependency>
+    <groupId>cn.hutool</groupId>
+    <artifactId>hutool-all</artifactId>
+    <version>5.8.20</version>
+</dependency>
+2. 编写配置文件 application.yml
+ai:
+  deepseek:
+    api-key: sk-xxxxxx
+    endpoint: https://api.deepseek.com/v1/chat/completions
+  qwen:
+    api-key: xxxxxxxx
+    endpoint: https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation
+3. 创建 AI 请求参数类
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class ChatMessage {
+    private String role; // "user" / "system"
+    private String content;
+}
+@Data
+public class AiRequestBody {
+    private String model;
+    private List<ChatMessage> messages;
+}
+4. 工具类封装（以 DeepSeek 为例）
+@Component
+public class DeepSeekClient {
+
+    @Value("${ai.deepseek.api-key}")
+    private String apiKey;
+
+    @Value("${ai.deepseek.endpoint}")
+    private String endpoint;
+
+    public String chat(String prompt) {
+        AiRequestBody body = new AiRequestBody();
+        body.setModel("deepseek-chat");
+        body.setMessages(List.of(new ChatMessage("user", prompt)));
+
+        HttpResponse response = HttpRequest.post(endpoint)
+            .header("Authorization", "Bearer " + apiKey)
+            .header("Content-Type", "application/json")
+            .body(JSONUtil.toJsonStr(body))
+            .execute();
+
+        JSONObject result = JSONUtil.parseObj(response.body());
+        return result.getJSONArray("choices")
+                     .getJSONObject(0)
+                     .getJSONObject("message")
+                     .getStr("content");
+    }
+}
+📌 三、调用接口示例
+@RestController
+@RequestMapping("/api/ai")
+public class AiController {
+
+    @Autowired
+    private DeepSeekClient deepSeekClient;
+
+    @GetMapping("/chat")
+    public ResponseEntity<String> chat(@RequestParam String prompt) {
+        String reply = deepSeekClient.chat(prompt);
+        return ResponseEntity.ok(reply);
+    }
+}

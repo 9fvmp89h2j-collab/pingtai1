@@ -1,0 +1,28 @@
+spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  sql:
+    init:
+      mode: ${SQL_INIT_MODE:never}
+
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: ${JWT_EXPIRATION:86400000}
+  refresh-expiration: ${JWT_REFRESH_EXPIRATION:604800000}
+
+springdoc:
+  swagger-ui:
+    enabled: false
+  api-docs:
+    enabled: false
+
+knife4j:
+  enable: false
+
+bootstrap:
+  admin:
+    username: ${ADMIN_BOOTSTRAP_USERNAME}
+    email: ${ADMIN_BOOTSTRAP_EMAIL}
+    password: ${ADMIN_BOOTSTRAP_PASSWORD}

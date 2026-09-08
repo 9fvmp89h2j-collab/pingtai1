@@ -1,0 +1,64 @@
+{
+  "target": "asset",
+  "mode": "single",
+  "prompt": "",
+  "role": "",
+  "input": "D:\\\u603b\\Pediatric Acupuncture Education System\\pingtai1\\image\u8bbe\u8ba1\\assets\\props\\material-bag\\bamboo-slip\\raw.png",
+  "threshold": 80,
+  "edge_threshold": 45,
+  "duration": 200,
+  "rows": 1,
+  "cols": 1,
+  "cell_size": 256,
+  "fit_scale": 0.84,
+  "trim_border": 4,
+  "edge_clean_depth": 4,
+  "align": "center",
+  "shared_scale": false,
+  "component_mode": "largest",
+  "component_padding": 18,
+  "min_component_area": 1,
+  "edge_touch_margin": 3,
+  "frame_labels": [
+    "prop-1"
+  ],
+  "frames": [
+    {
+      "grid": [
+        0,
+        0
+      ],
+      "source_box": [
+        0,
+        0,
+        1254,
+        1254
+      ],
+      "component_mode": "largest",
+      "component_count": 1,
+      "selected_component_area": 386853,
+      "selected_component_bbox": [
+        294,
+        179,
+        912,
+        1064
+      ],
+      "crop_bbox": [
+        276,
+        161,
+        930,
+        1082
+      ],
+      "edge_touch": false,
+      "output_size": [
+        152,
+        215
+      ],
+      "paste_position": [
+        52,
+        20
+      ]
+    }
+  ],
+  "edge_touch_frames": []
+}

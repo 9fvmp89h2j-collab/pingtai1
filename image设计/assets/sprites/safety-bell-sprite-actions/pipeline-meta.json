@@ -1,0 +1,262 @@
+{
+  "target": "npc",
+  "mode": "action",
+  "prompt": "",
+  "role": "",
+  "input": "D:\\\u603b\\Pediatric Acupuncture Education System\\pingtai1\\image\u8bbe\u8ba1\\assets\\sprites\\safety-bell-sprite-actions\\raw-sheet.png",
+  "threshold": 85,
+  "edge_threshold": 50,
+  "duration": 200,
+  "rows": 2,
+  "cols": 3,
+  "cell_size": 512,
+  "fit_scale": 0.84,
+  "trim_border": 4,
+  "edge_clean_depth": 5,
+  "align": "bottom",
+  "shared_scale": true,
+  "component_mode": "largest",
+  "component_padding": 24,
+  "min_component_area": 1,
+  "edge_touch_margin": 4,
+  "frame_labels": [
+    "safety-bell-sprite-1",
+    "safety-bell-sprite-2",
+    "safety-bell-sprite-3",
+    "safety-bell-sprite-4",
+    "safety-bell-sprite-5",
+    "safety-bell-sprite-6"
+  ],
+  "frames": [
+    {
+      "grid": [
+        0,
+        0
+      ],
+      "source_box": [
+        0,
+        0,
+        512,
+        512
+      ],
+      "component_mode": "largest",
+      "component_count": 1,
+      "selected_component_area": 83603,
+      "selected_component_bbox": [
+        108,
+        54,
+        452,
+        477
+      ],
+      "crop_bbox": [
+        84,
+        30,
+        476,
+        501
+      ],
+      "edge_touch": false,
+      "output_size": [
+        357,
+        430
+      ],
+      "paste_position": [
+        77,
+        42
+      ]
+    },
+    {
+      "grid": [
+        0,
+        1
+      ],
+      "source_box": [
+        512,
+        0,
+        1024,
+        512
+      ],
+      "component_mode": "largest",
+      "component_count": 1,
+      "selected_component_area": 84996,
+      "selected_component_bbox": [
+        67,
+        62,
+        411,
+        481
+      ],
+      "crop_bbox": [
+        43,
+        38,
+        435,
+        504
+      ],
+      "edge_touch": false,
+      "output_size": [
+        357,
+        425
+      ],
+      "paste_position": [
+        77,
+        47
+      ]
+    },
+    {
+      "grid": [
+        0,
+        2
+      ],
+      "source_box": [
+        1024,
+        0,
+        1536,
+        512
+      ],
+      "component_mode": "largest",
+      "component_count": 1,
+      "selected_component_area": 92918,
+      "selected_component_bbox": [
+        30,
+        65,
+        401,
+        484
+      ],
+      "crop_bbox": [
+        6,
+        41,
+        425,
+        504
+      ],
+      "edge_touch": false,
+      "output_size": [
+        382,
+        422
+      ],
+      "paste_position": [
+        65,
+        50
+      ]
+    },
+    {
+      "grid": [
+        1,
+        0
+      ],
+      "source_box": [
+        0,
+        512,
+        512,
+        1024
+      ],
+      "component_mode": "largest",
+      "component_count": 1,
+      "selected_component_area": 79880,
+      "selected_component_bbox": [
+        106,
+        11,
+        437,
+        424
+      ],
+      "crop_bbox": [
+        82,
+        0,
+        461,
+        448
+      ],
+      "edge_touch": true,
+      "output_size": [
+        346,
+        409
+      ],
+      "paste_position": [
+        83,
+        63
+      ]
+    },
+    {
+      "grid": [
+        1,
+        1
+      ],
+      "source_box": [
+        512,
+        512,
+        1024,
+        1024
+      ],
+      "component_mode": "largest",
+      "component_count": 1,
+      "selected_component_area": 79735,
+      "selected_component_bbox": [
+        71,
+        19,
+        408,
+        424
+      ],
+      "crop_bbox": [
+        47,
+        0,
+        432,
+        448
+      ],
+      "edge_touch": true,
+      "output_size": [
+        351,
+        409
+      ],
+      "paste_position": [
+        80,
+        63
+      ]
+    },
+    {
+      "grid": [
+        1,
+        2
+      ],
+      "source_box": [
+        1024,
+        512,
+        1536,
+        1024
+      ],
+      "component_mode": "largest",
+      "component_count": 4,
+      "selected_component_area": 84044,
+      "selected_component_bbox": [
+        28,
+        21,
+        385,
+        427
+      ],
+      "crop_bbox": [
+        4,
+        0,
+        409,
+        451
+      ],
+      "edge_touch": true,
+      "output_size": [
+        369,
+        411
+      ],
+      "paste_position": [
+        71,
+        61
+      ]
+    }
+  ],
+  "edge_touch_frames": [
+    [
+      1,
+      0
+    ],
+    [
+      1,
+      1
+    ],
+    [
+      1,
+      2
+    ]
+  ]
+}

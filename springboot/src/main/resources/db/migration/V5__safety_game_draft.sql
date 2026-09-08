@@ -1,0 +1,8 @@
+CREATE TABLE IF NOT EXISTS user_safety_game_draft (
+  user_id BIGINT NOT NULL,
+  draft_json JSON NOT NULL,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (user_id),
+  CONSTRAINT fk_safety_game_draft_user
+    FOREIGN KEY (user_id) REFERENCES `user`(id) ON DELETE CASCADE
+);
