@@ -126,7 +126,7 @@ public class QuizController {
         if (q == null) {
             return Result.error(ResultCode.PARAM_ERROR.getCode(), "题目不存在");
         }
-        if (q.getStatus() != null && q.getStatus() == 0) {
+        if (q.getStatus() != null && q.getStatus() != 1) {
             return Result.error(ResultCode.PARAM_ERROR.getCode(), "题目不可用");
         }
         Map<String, Object> m = new HashMap<>();

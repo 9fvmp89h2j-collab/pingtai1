@@ -3,7 +3,7 @@
 ## 当前使用模型
 
 - 模型：`modelo/corpo.obj`
-- SHA-256：`65EA8D57217B4F79A0EA25FBB22E6AEC64F418062781A6E8568A2C1EB7794A0E`
+- SHA-256：`51859A1DDD49FA9B6D3A8760B5DF5B38352A81A9F22E33A513DE9D66FD562302`
 - OBJ 文件头：`Blender v2.74 (sub 0) OBJ File: 'corpo.blend'`
 - 首次仓库记录：提交 `a7ef84dfccc641f42f4271dc7130dcc4b5e68b9d`
 - 接入页面：`src/views/frontend/CopperMan.vue`
@@ -14,12 +14,4 @@
 
 仓库中没有对应的 `corpo.blend`、建模记录、作者信息、下载地址或许可证，仅凭现有文件无法确认模型的原始作者、获取渠道或可用授权。
 
-## 备用模型
-
-- 超精修 Q 版 OBJ：`modelo/xiaotongren-ultra-refined.obj`
-- 精修 Q 版 OBJ：`modelo/xiaotongren-refined.obj`
-- 真实 Q 版 OBJ：`modelo/xiaotongren-real.obj`
-- 实现：`src/utils/chibiCopperMan.js`
-- 类型：项目内使用 Three.js 基础几何体与程序化曲面绘制
-
-当 OBJ 加载失败时，页面会自动显示该备用模型。
+页面只保留并加载上述成人模型；模型载入失败时会显示重试提示。

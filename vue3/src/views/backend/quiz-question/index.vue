@@ -236,12 +236,12 @@
             placeholder="可选"
           />
         </a-form-item>
-        <template v-if="formData.questionType === 'SCENARIO_CHOICE'">
-          <a-form-item label="场景题图" required>
+        <template v-if="['TRUE_FALSE', 'SCENARIO_CHOICE'].includes(formData.questionType)">
+          <a-form-item :label="formData.questionType === 'SCENARIO_CHOICE' ? '场景题图' : '判断题图'" :required="formData.questionType === 'SCENARIO_CHOICE'">
             <div class="scene-upload-row">
               <div class="scene-preview" :class="{ empty: !formData.sceneImagePath }">
-                <img v-if="formData.sceneImagePath" :src="resolveMediaUrl(formData.sceneImagePath)" :alt="formData.sceneImageAlt || '场景题图预览'" />
-                <span v-else>4:3 场景图</span>
+                <img v-if="formData.sceneImagePath" :src="resolveMediaUrl(formData.sceneImagePath)" :alt="formData.sceneImageAlt || '题目配图预览'" />
+                <span v-else>4:3 题目配图</span>
               </div>
               <a-space direction="vertical">
                 <a-upload accept="image/png,image/jpeg,image/webp" :show-upload-list="false" :custom-request="handleSceneUpload">
@@ -250,12 +250,45 @@
                 <a-button v-if="formData.sceneImagePath" type="link" danger @click="formData.sceneImagePath = ''">移除图片</a-button>
               </a-space>
             </div>
+            <a-select
+              v-if="formData.moduleCode === 'SAFETY_GUARDIAN'"
+              v-model:value="formData.sceneImagePath"
+              :options="quizAssetOptionsForType(formData.questionType)"
+              show-search
+              option-filter-prop="label"
+              allow-clear
+              @change="handleQuizAssetChange"
+              style="width: 100%; margin-top: 10px"
+              placeholder="选择内置安全守护案素材"
+            />
           </a-form-item>
-          <a-form-item label="图片说明" required>
+          <a-form-item label="图片说明" :required="formData.questionType === 'SCENARIO_CHOICE'">
             <a-input v-model:value="formData.sceneImageAlt" :maxlength="255" placeholder="描述画面内容，供无障碍阅读使用" />
           </a-form-item>
           <a-form-item label="观察提示">
             <a-input v-model:value="formData.sceneCaption" :maxlength="255" placeholder="例如：发现危险行为，先阻止，再告诉老师" />
+          </a-form-item>
+          <a-form-item label="题目视频">
+            <div class="scene-upload-row">
+              <div class="scene-preview video-preview" :class="{ empty: !formData.sceneVideoPath }">
+                <video
+                  v-if="formData.sceneVideoPath"
+                  :src="resolveMediaUrl(formData.sceneVideoPath)"
+                  :poster="formData.sceneImagePath ? resolveMediaUrl(formData.sceneImagePath) : undefined"
+                  controls
+                  playsinline
+                  preload="metadata"
+                />
+                <span v-else>可选 MP4 视频</span>
+              </div>
+              <a-space direction="vertical">
+                <a-upload accept="video/mp4,.mp4" :show-upload-list="false" :custom-request="handleSceneVideoUpload">
+                  <a-button :loading="uploadingSceneVideo">{{ formData.sceneVideoPath ? '替换视频' : '上传视频' }}</a-button>
+                </a-upload>
+                <a-button v-if="formData.sceneVideoPath" type="link" danger @click="formData.sceneVideoPath = ''">移除视频</a-button>
+                <small class="upload-hint">MP4，最大80MB；未上传时显示题图</small>
+              </a-space>
+            </div>
           </a-form-item>
         </template>
         <a-form-item label="题目分类">
@@ -311,8 +344,9 @@ import { ref, reactive, onMounted } from 'vue'
 import { message } from 'ant-design-vue'
 import AdminEditorSurface from '@/components/backend/AdminEditorSurface.vue'
 import AdminPageError from '@/components/backend/AdminPageError.vue'
-import { uploadImage } from '@/api/FileApi'
+import { uploadImage, uploadSimpleFile } from '@/api/FileApi'
 import { resolveMediaUrl } from '@/utils/resolveMediaUrl'
+import { quizAssetFor, safetyAssetByFile, safetyAssetOptions } from '@/data/safetyGuardianAssets'
 import {
   getQuizQuestionPage, createQuizQuestion, updateQuizQuestion, deleteQuizQuestion,
   getQuizStage, updateQuizStage
@@ -337,6 +371,11 @@ const difficultyFormOptions = [
 const statusSearchOptions = [
   { label: '停用', value: 0 }, { label: '启用', value: 1 }, { label: '归档', value: 2 }
 ]
+const quizAssetOptions = safetyAssetOptions.filter(item => item.group.startsWith('第一关')).map(item => ({ value: item.value, label: item.label, group: item.group }))
+function quizAssetOptionsForType(type) {
+  const group = type === 'TRUE_FALSE' ? '第一关 · 判断题' : type === 'SCENARIO_CHOICE' ? '第一关 · 情境题' : ''
+  return group ? quizAssetOptions.filter(item => item.group === group) : quizAssetOptions
+}
 
 const searchForm = reactive({
   title: '', category: '', moduleCode: undefined, questionType: undefined,
@@ -347,6 +386,7 @@ const loading = ref(false)
 const loadError = ref('')
 const saving = ref(false)
 const uploadingScene = ref(false)
+const uploadingSceneVideo = ref(false)
 const pagination = reactive({
   current: 1, pageSize: 10, total: 0, showSizeChanger: true,
   showTotal: total => `共 ${total} 条数据`
@@ -383,7 +423,7 @@ const isEdit = ref(false)
 const formData = reactive({
   id: null, questionCode: '', moduleCode: 'GENERAL', questionType: 'SINGLE_CHOICE', title: '',
   optionA: '', optionB: '', optionC: '', optionD: '', correctAnswer: 'A', explanation: '',
-  sceneImagePath: '', sceneImageAlt: '', sceneCaption: '', category: '', difficulty: 1, status: 0
+  sceneImagePath: '', sceneImageAlt: '', sceneCaption: '', sceneVideoPath: '', category: '', difficulty: 1, status: 0
 })
 
 async function loadData() {
@@ -419,7 +459,7 @@ function resetForm() {
   Object.assign(formData, {
     id: null, questionCode: '', moduleCode: 'GENERAL', questionType: 'SINGLE_CHOICE', title: '',
     optionA: '', optionB: '', optionC: '', optionD: '', correctAnswer: 'A', explanation: '',
-    sceneImagePath: '', sceneImageAlt: '', sceneCaption: '', category: '', difficulty: 1, status: 0
+    sceneImagePath: '', sceneImageAlt: '', sceneCaption: '', sceneVideoPath: '', category: '', difficulty: 1, status: 0
   })
 }
 function showCreateModal() {
@@ -436,7 +476,8 @@ function handleEdit(record) {
     questionType: record.questionType || 'SINGLE_CHOICE', title: record.title || '',
     optionA: record.optionA || '', optionB: record.optionB || '', optionC: record.optionC || '', optionD: record.optionD || '',
     correctAnswer: record.correctAnswer || 'A', explanation: record.explanation || '',
-    sceneImagePath: record.sceneImagePath || '', sceneImageAlt: record.sceneImageAlt || '', sceneCaption: record.sceneCaption || '',
+    sceneImagePath: record.sceneImagePath || quizAssetFor(record.questionCode)?.file || '', sceneImageAlt: record.sceneImageAlt || quizAssetFor(record.questionCode)?.alt || '', sceneCaption: record.sceneCaption || '',
+    sceneVideoPath: record.sceneVideoPath || '',
     category: record.category || '', difficulty: record.difficulty ?? 1, status: record.status ?? 0
   })
   isModalVisible.value = true
@@ -447,11 +488,16 @@ function handleQuestionTypeChange(type) {
     formData.optionD = ''
     if (!['A', 'B'].includes(formData.correctAnswer)) formData.correctAnswer = 'A'
   }
-  if (type !== 'SCENARIO_CHOICE') {
+  if (!['TRUE_FALSE', 'SCENARIO_CHOICE'].includes(type)) {
     formData.sceneImagePath = ''
     formData.sceneImageAlt = ''
     formData.sceneCaption = ''
+    formData.sceneVideoPath = ''
   }
+}
+function handleQuizAssetChange(file) {
+  const asset = safetyAssetByFile(file)
+  if (asset) formData.sceneImageAlt = asset.alt
 }
 const buildPayload = () => ({
   questionCode: formData.questionCode || undefined, moduleCode: formData.moduleCode, questionType: formData.questionType,
@@ -459,7 +505,8 @@ const buildPayload = () => ({
   optionC: formData.optionC || undefined, optionD: formData.optionD || undefined,
   correctAnswer: formData.correctAnswer, explanation: formData.explanation || undefined,
   sceneImagePath: formData.sceneImagePath || undefined, sceneImageAlt: formData.sceneImageAlt || undefined,
-  sceneCaption: formData.sceneCaption || undefined, category: formData.category || undefined,
+  sceneCaption: formData.sceneCaption || undefined, sceneVideoPath: formData.sceneVideoPath || undefined,
+  category: formData.category || undefined,
   difficulty: formData.difficulty, status: formData.status
 })
 async function handleModalOk() {
@@ -504,6 +551,34 @@ async function handleSceneUpload({ file, onSuccess, onError }) {
     onError?.(error)
     message.error(error?.message || '场景图上传失败')
   } finally { uploadingScene.value = false }
+}
+
+async function handleSceneVideoUpload({ file, onSuccess, onError }) {
+  const isMp4 = file?.type === 'video/mp4' || /\.mp4$/i.test(file?.name || '')
+  if (!isMp4) {
+    const error = new Error('只支持MP4视频')
+    onError?.(error)
+    message.error(error.message)
+    return
+  }
+  if (file.size > 80 * 1024 * 1024) {
+    const error = new Error('视频大小不能超过80MB')
+    onError?.(error)
+    message.error(error.message)
+    return
+  }
+  if (uploadingSceneVideo.value) return
+  uploadingSceneVideo.value = true
+  try {
+    const path = await uploadSimpleFile(file, 'VIDEO', { showDefaultMsg: false, successMsg: false })
+    formData.sceneVideoPath = typeof path === 'string' ? path : (path?.url || path?.filePath || path?.path || '')
+    if (!formData.sceneVideoPath) throw new Error('服务器未返回视频路径')
+    onSuccess?.(path)
+    message.success('题目视频上传成功')
+  } catch (error) {
+    onError?.(error)
+    message.error(error?.message || '题目视频上传失败')
+  } finally { uploadingSceneVideo.value = false }
 }
 
 const stageOpen = ref(false)
@@ -612,10 +687,25 @@ onMounted(loadData)
   color: #8c8c8c;
 }
 
-.scene-preview img {
+.scene-preview img,
+.scene-preview video {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.video-preview {
+  background: #17221e;
+}
+
+.video-preview.empty {
+  background: #f6f8f7;
+}
+
+.upload-hint {
+  max-width: 220px;
+  color: #7b8782;
+  line-height: 1.5;
 }
 
 .stage-composer-head {

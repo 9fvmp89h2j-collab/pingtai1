@@ -98,12 +98,12 @@ class GameStateServiceIdempotencyTest {
     @Test
     void safetyDraftIsStoredPerUserOverwrittenAndCleared() {
         Map<String, Object> first = Map.of(
-                "version", 1,
+                "version", 3,
                 "gamePhase", "quiz",
                 "totalScore", 100,
                 "quiz", Map.of("index", 2, "lives", 3));
         Map<String, Object> second = Map.of(
-                "version", 1,
+                "version", 3,
                 "gamePhase", "memory",
                 "totalScore", 240,
                 "memory", Map.of("matchedCount", 2));

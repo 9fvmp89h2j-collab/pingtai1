@@ -39,12 +39,22 @@
           </button>
         </div>
 
+        <section class="symptom-entry" aria-label="症状分类入口">
+          <div class="panel-title"><SafetyCertificateFilled /><strong>症状分类 / 场景入口</strong></div>
+          <p>选择你感兴趣的身体主题，查看推荐穴位。</p>
+          <button v-for="(item, index) in symptomEntries" :key="item.label" type="button" class="symptom-row" @click="selectRecommended(index)">
+            <span class="symptom-icon"><img :src="item.image" alt="" /></span>
+            <span><strong>{{ item.label }}</strong><small>{{ item.note }}</small></span>
+            <span class="symptom-arrow">›</span>
+          </button>
+        </section>
+
         <section class="mission-card">
           <div class="panel-title">
             <BookFilled />
-            <strong>今日观察任务</strong>
+            <strong>症状分类 / 场景入口</strong>
           </div>
-          <p>找到 3 个身体线索，修复今天的铜人档案。</p>
+          <p>先选一个想了解的身体主题，再跟着小铜人寻找线索。</p>
 
           <div class="task-list">
             <button
@@ -130,6 +140,12 @@
           <span><DragOutlined /></span>
           {{ statusText }}
         </div>
+
+        <div class="stage-actions" aria-label="模型操作提示">
+          <div><AimOutlined /><strong>点击穴位</strong><small>查看详细信息</small></div>
+          <div><RotateRightOutlined /><strong>360°旋转</strong><small>拖动旋转观察</small></div>
+          <div><SafetyCertificateFilled /><strong>切换视角</strong><small>正面 / 背面 / 侧面</small></div>
+        </div>
       </section>
 
       <aside class="right-rail" aria-label="线索档案">
@@ -174,6 +190,31 @@
           </button>
 
           <p class="safety-inline"><img :src="safetyShieldImage" alt="" />这里只进行观察学习，不进行针刺操作。</p>
+        </section>
+
+        <section class="related-points" aria-label="今日推荐穴位">
+          <div class="panel-title">
+            <BulbFilled />
+            <strong>症状推荐穴位</strong>
+          </div>
+          <p>基于传统中医理论，为你推荐以下观察入口。</p>
+          <button
+            v-for="task in todayTasks"
+            :key="`recommend-${task.code}`"
+            type="button"
+            class="related-point"
+            :class="{ active: task.code === selectedPoint?.code }"
+            @click="openTaskClue(task)"
+          >
+            <span class="related-point__thumb"><img :src="task.image || clueFileImage" alt="" /></span>
+            <span class="related-point__copy"><strong>{{ task.name }}</strong><small>{{ task.bodyArea }} · {{ task.meridianName }}</small></span>
+            <span class="related-point__arrow">›</span>
+          </button>
+        </section>
+
+        <section class="video-panel" aria-label="学习视频">
+          <div class="video-tabs"><button type="button" class="active">养生小视频</button><button type="button">操作教学视频</button><span>更多 ›</span></div>
+          <div class="video-grid"><article><div class="video-thumb video-thumb--child"><img :src="teacherImage" alt="" /><i>▶</i></div><strong>1分钟认识肩井穴</strong><small>用动画讲解穴位位置和作用</small></article><article><div class="video-thumb video-thumb--point"><img :src="clueFileImage" alt="" /><i>▶</i></div><strong>按揉示范：肩颈放松小技巧</strong><small>专业老师手把手教学</small></article></div>
         </section>
       </aside>
     </section>
@@ -350,7 +391,6 @@ import safetyShieldImage from '@/assets/copper-detective-2026/safety-shield.png'
 import materialBagImage from '@/assets/copper-detective-2026/material-bag.png'
 import { discoverCopperManAcupoint, getCopperManDailyCase, listCopperManAcupoints } from '@/api/AcupunctureApi'
 import { useUserStore } from '@/store/user'
-import { createChibiCopperMan } from '@/utils/chibiCopperMan'
 
 const viewerRef = ref(null)
 const selectedCode = ref('')
@@ -396,6 +436,14 @@ const viewModes = [
   { key: 'front', label: '正面' },
   { key: 'back', label: '背面' },
   { key: 'side', label: '侧面' }
+]
+const symptomEntries = [
+  { label: '肩颈酸痛', note: '肩颈僵硬、酸痛不适', image: clueFileImage },
+  { label: '睡眠不佳', note: '入睡困难、易醒多梦', image: safetyShieldImage },
+  { label: '头痛头晕', note: '头部胀痛、眩晕不适', image: detectiveBadgeImage },
+  { label: '脾胃不适', note: '胃胀胃痛、消化不良', image: materialBagImage },
+  { label: '久坐疲劳', note: '腰背酸痛、精力不足', image: copperTokenImage },
+  { label: '亲子保健', note: '儿童常见问题、健康成长', image: teacherImage }
 ]
 const atlasStatusOptions = [
   { value: 'all', label: '全部' },
@@ -549,6 +597,11 @@ function openTaskClue(point) {
   selectPoint(point)
 }
 
+function selectRecommended(index) {
+  const point = todayTasks.value[index % Math.max(todayTasks.value.length, 1)]
+  if (point) openTaskClue(point)
+}
+
 async function collectCurrentClue() {
   if (!selectedPoint.value || !isCurrentTarget.value || !isCurrentRevealed.value || isCurrentObserved.value || collecting.value) return
   collecting.value = true
@@ -641,6 +694,7 @@ async function reloadDailyCase() {
     await loadDailyCase()
     await nextTick()
     if (!renderer) initScene()
+    else createMarkers()
   } catch (error) {
     dataLoadError.value = error.message || '无法连接穴位知识库，请确认后端服务已经启动。'
     statusText.value = '穴位知识载入失败'
@@ -714,19 +768,20 @@ function createPedestal() {
   })
 
   const base = new THREE.Mesh(new THREE.CylinderGeometry(62, 68, 10, 88), baseMaterial)
-  base.position.y = -101
+  // Keep the platform just below the model's lowest vertices so both feet remain visible.
+  base.position.y = -106
   scene.add(base)
 
   const top = new THREE.Mesh(new THREE.CylinderGeometry(52, 60, 5, 88), topMaterial)
-  top.position.y = -93
+  top.position.y = -98
   scene.add(top)
 }
 
 function loadBodyModel() {
   const copperMaterial = new THREE.MeshStandardMaterial({
-    color: 0x9b4f1f,
-    metalness: 0.42,
-    roughness: 0.48,
+    color: 0xb87333,
+    metalness: 0.62,
+    roughness: 0.34,
     side: THREE.DoubleSide
   })
 
@@ -750,14 +805,15 @@ function loadBodyModel() {
     },
     undefined,
     () => {
-      scene.add(createChibiCopperMan())
-      statusText.value = '成人模型载入失败，已切换到备用小铜人'
-      setView(viewMode.value)
+      statusText.value = '成人针灸铜人载入失败，请刷新页面重试'
     }
   )
 }
 
 function createMarkers() {
+  markerGroup.clear()
+  markerByCode.clear()
+
   const geometry = new THREE.SphereGeometry(0.78, 20, 20)
   const material = new THREE.MeshStandardMaterial({
     color: 0x1d6fd1,
@@ -822,6 +878,8 @@ function animate() {
 
 onMounted(async () => {
   window.addEventListener('keydown', handleAtlasKeydown)
+  await nextTick()
+  if (!renderer) initScene()
   await reloadDailyCase()
   if (route.query.acupoint) await openAtlas()
 })
@@ -1390,34 +1448,6 @@ onBeforeUnmount(() => {
   z-index: 2;
   width: 100%;
   height: 686px;
-}
-
-.reference-copper-view {
-  position: absolute;
-  z-index: 1;
-  inset: 62px 110px 34px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  pointer-events: none;
-  transition: transform 180ms ease, opacity 180ms ease;
-}
-
-.reference-copper-view img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  filter: saturate(0.96) contrast(1.02);
-}
-
-.reference-copper-view--side img {
-  transform: translateX(2%);
-}
-
-.reference-copper-view--side.is-mirrored img {
-  transform: translateX(-2%) scaleX(-1);
 }
 
 .model-viewer canvas {
@@ -2886,4 +2916,149 @@ onBeforeUnmount(() => {
 .clue-knowledge--use { border-color: rgba(202, 157, 64, .52); background: #fff7dd; }
 .atlas-story--use { border-color: #d7b15b; background: #fff8df; }
 .atlas-story--use small { display: block; margin-top: 7px; color: #876b3a; font-size: 10px; line-height: 1.45; }
+
+/* Reference-led desktop composition: parchment workspace, quiet panels, and a larger model stage. */
+.copper-shell {
+  min-height: calc(100vh - var(--site-nav-height));
+  padding: 18px clamp(18px, 3vw, 46px) 24px;
+  background-color: #f4ead2;
+  background-image: linear-gradient(rgba(255, 249, 232, .74), rgba(246, 242, 220, .78)), var(--copper-bg);
+  background-size: cover;
+  background-position: center;
+  color: #29483d;
+}
+
+.copper-hero {
+  grid-template-columns: 150px minmax(0, 1fr) 286px;
+  gap: 22px;
+  max-width: 1600px;
+  margin-bottom: 14px;
+  align-items: center;
+}
+
+.back-button { width: 132px; min-height: 42px; border-color: #d9c18d; background: #fffdf4; box-shadow: 0 5px 12px rgba(103, 72, 31, .09); }
+.brand-kicker { color: #b77925; font-size: 13px; letter-spacing: .04em; }
+.hero-copy h1 { margin: 4px 0 5px; color: #165446; font-family: var(--site-title-font), "Microsoft YaHei", serif; font-size: clamp(34px, 3.7vw, 56px); line-height: 1.08; }
+.hero-copy p { color: #67563d; font-size: 15px; }
+.hero-tools { grid-template-columns: 1fr 1fr; align-items: stretch; gap: 9px; }
+.detective-status { min-width: 0; padding: 7px 9px; border-color: #ddc995; background: rgba(255, 253, 244, .9); }
+.detective-status__icon, .detective-status__icon img { width: 36px; height: 36px; }
+.atlas-launch { min-height: 50px; border-color: #c69a4d; background: #1c6756; box-shadow: 0 5px 12px rgba(28, 103, 86, .16); }
+
+.copper-workspace { grid-template-columns: minmax(250px, 310px) minmax(520px, 1fr) minmax(320px, 370px); gap: 12px; max-width: 1600px; }
+.left-rail, .right-rail { gap: 12px; }
+.view-tabs, .mission-card, .collection-card, .reward-preview, .model-stage, .achievement-card, .search-panel, .clue-file, .copper-tip, .related-points { border-color: #dfc98e; border-radius: 10px; background: rgba(255, 252, 241, .92); box-shadow: 0 7px 18px rgba(104, 74, 32, .09); backdrop-filter: none; }
+.view-tabs { padding: 6px; }
+.view-tabs button { min-height: 34px; font-size: 12px; }
+.view-tabs button.active { background: #246a58; }
+.mission-card, .reward-preview, .clue-file, .related-points { padding: 13px; }
+.panel-title, .split-title > span { color: #1e594c; font-size: 14px; }
+.mission-card p, .related-points > p { margin: 6px 0 9px; color: #7a6b55; font-size: 11px; line-height: 1.45; }
+.task-list { border-color: #eadbb9; background: #fffef9; }
+.task-row { min-height: 55px; padding: 8px 9px; border-bottom-color: #eee4ca; }
+.task-row.active, .task-row:hover { background: #eef5e7; }
+.task-row strong { color: #275b4e; font-size: 13px; }
+.task-row em { color: #81735f; font-size: 11px; }
+.task-check { width: 18px; height: 18px; border-color: #d3c29f; }
+.task-progress { margin-top: 10px; color: #6b5e49; font-size: 11px; }
+.progress-track { height: 7px; margin-top: 6px; background: #e9e0c8; }
+.progress-track span { background: #3d8a69; }
+.reward-preview { background: #f4f8e9; }
+.reward-items span { border-color: #e5d7b6; border-radius: 8px; background: #fffdf5; font-size: 11px; }
+
+.model-stage { min-height: 700px; background-color: #fbf5e5; background-image: linear-gradient(rgba(255, 249, 232, .58), rgba(255, 249, 232, .72)), var(--copper-bg); }
+.model-viewer { height: 700px; }
+.stage-heading { top: 14px; right: 16px; left: 16px; }
+.stage-heading span { padding: 7px 12px; background: #246a58; }
+.stage-heading strong { color: #8b6b3e; font-size: 12px; }
+.stage-hint { color: #8b7655; font-size: 12px; }
+.stage-hint :deep(svg) { width: 30px; height: 30px; padding: 7px; border-color: #dfc99a; background: #fffdf5; color: #b17a2d; }
+.viewer-controls { right: 16px; bottom: 96px; }
+.viewer-controls button { width: 38px; height: 38px; background: #fffdf6; color: #6e5a3e; }
+.viewer-status { right: 19%; bottom: 16px; left: 19%; min-height: 38px; border-color: #e0c890; background: rgba(255, 249, 232, .95); color: #98682a; font-size: 12px; }
+
+.clue-file { min-height: 0; gap: 10px; }
+.clue-file__topline { padding-bottom: 9px; }
+.clue-file__topline > span { color: #1e594c; font-size: 14px; }
+.selected-card { padding: 14px; border-color: #e0c68b; border-radius: 9px; background: #fffef7; }
+.selected-card h2 { color: #155546; font-size: 28px; }
+.clue-meta { gap: 6px; }
+.clue-meta > div { padding: 8px 10px; background: #faf6e9; }
+.clue-knowledge { padding: 10px; border-color: #b8d1a7; border-radius: 8px; background: #edf6e5; }
+.collect-clue { min-height: 42px; border-radius: 8px; background: #1d6755; }
+.safety-inline { margin-top: 0; padding-top: 9px; border-top-color: #e8d9b8; color: #6d624f; font-size: 10px; }
+
+.related-points { align-self: start; }
+.related-point { display: grid; grid-template-columns: 42px minmax(0, 1fr) 14px; gap: 9px; width: 100%; align-items: center; padding: 8px 7px; border: 1px solid transparent; border-radius: 8px; background: #fffdf6; color: #285b4f; cursor: pointer; text-align: left; }
+.related-point + .related-point { margin-top: 6px; }
+.related-point:hover, .related-point.active { border-color: #a7c79c; background: #f1f7e9; }
+.related-point__thumb { display: grid; width: 42px; height: 42px; place-items: center; overflow: hidden; border-radius: 7px; background: #f0e9d7; }
+.related-point__thumb img { width: 100%; height: 100%; object-fit: contain; }
+.related-point__copy { display: grid; min-width: 0; gap: 2px; }
+.related-point__copy strong { overflow: hidden; font-size: 13px; text-overflow: ellipsis; white-space: nowrap; }
+.related-point__copy small { overflow: hidden; color: #80725c; font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
+.related-point__arrow { color: #b47828; font-size: 22px; line-height: 1; }
+.symptom-entry { padding: 13px; border: 1px solid #dfc98e; border-radius: 10px; background: rgba(255, 252, 241, .92); box-shadow: 0 7px 18px rgba(104, 74, 32, .09); }
+.symptom-entry > p { margin: 6px 0 9px; color: #7a6b55; font-size: 11px; }
+.symptom-row { display: grid; grid-template-columns: 38px minmax(0, 1fr) 14px; gap: 9px; width: 100%; min-height: 48px; align-items: center; padding: 5px 7px; border: 1px solid transparent; border-radius: 8px; background: #fffdf6; color: #285b4f; cursor: pointer; text-align: left; }
+.symptom-row + .symptom-row { margin-top: 5px; }
+.symptom-row:hover { border-color: #c5d8b1; background: #f1f7e9; }
+.symptom-icon { display: grid; width: 34px; height: 34px; place-items: center; overflow: hidden; border-radius: 50%; background: #f5ead0; }
+.symptom-icon img { width: 100%; height: 100%; object-fit: contain; }
+.symptom-row > span:nth-child(2) { display: grid; min-width: 0; gap: 2px; }
+.symptom-row strong { font-size: 13px; }
+.symptom-row small { overflow: hidden; color: #82735e; font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
+.symptom-arrow { color: #b47828; font-size: 21px; }
+.stage-actions { position: absolute; z-index: 3; right: 9%; bottom: 65px; left: 9%; display: grid; grid-template-columns: repeat(3, 1fr); padding: 10px 8px; border: 1px solid #e3ca8e; border-radius: 28px; background: rgba(255, 250, 235, .96); box-shadow: 0 7px 16px rgba(103, 71, 30, .08); }
+.stage-actions > div { display: grid; grid-template-columns: 32px 1fr; gap: 0 7px; align-items: center; justify-content: center; padding: 2px 12px; border-right: 1px solid #eadbb9; }
+.stage-actions > div:last-child { border-right: 0; }
+.stage-actions svg { grid-row: span 2; color: #b77925; font-size: 24px; }
+.stage-actions strong { color: #8e5f22; font-size: 12px; }
+.stage-actions small { color: #85745a; font-size: 10px; }
+.video-panel { padding: 12px; border: 1px solid #dfc98e; border-radius: 10px; background: rgba(255, 252, 241, .92); box-shadow: 0 7px 18px rgba(104, 74, 32, .09); }
+.video-tabs { display: flex; align-items: center; gap: 4px; margin-bottom: 9px; }
+.video-tabs button { padding: 7px 10px; border: 0; border-radius: 7px; background: transparent; color: #6e624e; font: inherit; font-size: 11px; font-weight: 800; cursor: pointer; }
+.video-tabs button.active { background: #246a58; color: #fff; }
+.video-tabs span { margin-left: auto; color: #8b7047; font-size: 10px; }
+.video-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.video-grid article { min-width: 0; }
+.video-thumb { position: relative; height: 82px; overflow: hidden; border-radius: 7px; background: #e9dfca; }
+.video-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.video-thumb--child img { object-position: center 22%; }
+.video-thumb--point img { object-position: center 35%; }
+.video-thumb i { position: absolute; top: 50%; left: 50%; display: grid; width: 30px; height: 30px; place-items: center; color: #fff; font-size: 12px; font-style: normal; border: 2px solid #fff; border-radius: 50%; background: rgba(37, 31, 20, .62); transform: translate(-50%, -50%); }
+.video-grid strong, .video-grid small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.video-grid strong { margin-top: 5px; color: #2b594b; font-size: 11px; }
+.video-grid small { margin-top: 2px; color: #82735e; font-size: 9px; }
+
+@media (max-width: 1240px) {
+  .copper-shell { padding-inline: 22px; }
+  .copper-workspace { grid-template-columns: 270px minmax(460px, 1fr) 320px; }
+  .hero-tools { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 920px) {
+  .copper-shell { padding: 14px 12px 22px; }
+  .copper-hero { grid-template-columns: 1fr; gap: 10px; }
+  .back-button { width: auto; justify-self: start; }
+  .hero-tools { width: 100%; grid-template-columns: 1fr 1fr; }
+  .copper-workspace { grid-template-columns: 1fr; }
+  .left-rail, .right-rail { grid-template-columns: 1fr 1fr; }
+  .view-tabs, .symptom-entry, .related-points, .video-panel { grid-column: 1 / -1; }
+  .model-stage, .model-viewer { min-height: 560px; height: 560px; }
+  .stage-actions { right: 5%; left: 5%; }
+}
+
+@media (max-width: 560px) {
+  .hero-tools, .left-rail, .right-rail { grid-template-columns: 1fr; }
+  .hero-copy { padding-right: 0; }
+  .hero-copy h1 { font-size: 29px; }
+  .model-stage, .model-viewer { min-height: 500px; height: 500px; }
+  .viewer-status { right: 12px; left: 12px; }
+  .stage-actions { right: 10px; bottom: 62px; left: 10px; grid-template-columns: 1fr; gap: 5px; border-radius: 14px; }
+  .stage-actions > div { grid-template-columns: 26px 1fr; padding: 4px 8px; border-right: 0; border-bottom: 1px solid #eadbb9; }
+  .stage-actions > div:last-child { border-bottom: 0; }
+  .stage-actions svg { font-size: 18px; }
+  .video-grid { grid-template-columns: 1fr 1fr; }
+}
 </style>

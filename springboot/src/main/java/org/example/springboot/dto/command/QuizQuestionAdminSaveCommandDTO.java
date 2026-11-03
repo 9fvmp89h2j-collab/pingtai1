@@ -32,6 +32,8 @@ public class QuizQuestionAdminSaveCommandDTO {
     private String sceneImagePath;
     private String sceneImageAlt;
     private String sceneCaption;
+    @Schema(description = "可选的题目MP4视频路径")
+    private String sceneVideoPath;
 
     @Schema(description = "题目分类")
     private String category;

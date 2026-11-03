@@ -53,7 +53,7 @@ public class GameStateService {
     private static final int SAFETY_CASE_SCORE_REWARD = 10;
     private static final int SAFETY_CASE_UNLOCK_SCORE = 20;
     private static final int MAX_SAFETY_DRAFT_BYTES = 64 * 1024;
-    private static final Set<String> SAFETY_DRAFT_PHASES = Set.of("quiz", "memory", "sort", "pledge");
+    private static final Set<String> SAFETY_DRAFT_PHASES = Set.of("quiz", "scenario", "memory", "pledge");
     private static final Set<Integer> MATCH_MILESTONES = Set.of(50, 100, 200, 350, 500, 750, 1000);
     private static final Set<Integer> SORT_MILESTONES = Set.of(50, 100, 150, 200, 250, 300);
     private static final Set<String> CONSUMABLE_MATERIALS = Set.of(
@@ -316,7 +316,7 @@ public class GameStateService {
     @Transactional
     public Map<String, Object> saveSafetyDraft(Long userId, Map<String, Object> draft) {
         requireUser(userId);
-        if (draft == null || !Integer.valueOf(1).equals(asInteger(draft.get("version")))) {
+        if (draft == null || !Integer.valueOf(3).equals(asInteger(draft.get("version")))) {
             throw new BusinessException("400", "安全课堂进度版本无效");
         }
         String phase = String.valueOf(draft.getOrDefault("gamePhase", ""));

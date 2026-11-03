@@ -88,6 +88,13 @@ public class QuizQuestionAdminService {
             throw new BusinessException("题目不存在");
         }
         validateSave(dto);
+        Long stageRefs = quizStageQuestionMapper.selectCount(new LambdaQueryWrapper<org.example.springboot.entity.QuizStageQuestion>()
+                .eq(org.example.springboot.entity.QuizStageQuestion::getQuestionId, id));
+        String nextModule = StrUtil.isBlank(dto.getModuleCode()) ? "GENERAL" : dto.getModuleCode().trim().toUpperCase();
+        if (stageRefs > 0 && (dto.getStatus() != 1 || !nextModule.equals(e.getModuleCode())
+                || !dto.getQuestionType().equals(e.getQuestionType()))) {
+            throw new BusinessException("题目正在关卡中使用，请先在关卡编排中替换");
+        }
         fillEntity(e, dto);
         quizQuestionMapper.updateById(e);
         bumpAssignedStageRevisions(id);
@@ -138,6 +145,10 @@ public class QuizQuestionAdminService {
                 && (StrUtil.isBlank(dto.getSceneImagePath()) || StrUtil.isBlank(dto.getSceneImageAlt()))) {
             throw new BusinessException("启用场景题前请上传题图并填写图片说明");
         }
+        if (StrUtil.isNotBlank(dto.getSceneVideoPath())
+                && !dto.getSceneVideoPath().trim().toLowerCase().endsWith(".mp4")) {
+            throw new BusinessException("题目视频只支持MP4格式");
+        }
     }
 
     private static String normalizeQuestionType(String raw) {
@@ -177,6 +188,7 @@ public class QuizQuestionAdminService {
         e.setSceneImagePath(StrUtil.isBlank(dto.getSceneImagePath()) ? null : dto.getSceneImagePath().trim());
         e.setSceneImageAlt(StrUtil.isBlank(dto.getSceneImageAlt()) ? null : dto.getSceneImageAlt().trim());
         e.setSceneCaption(StrUtil.isBlank(dto.getSceneCaption()) ? null : dto.getSceneCaption().trim());
+        e.setSceneVideoPath(StrUtil.isBlank(dto.getSceneVideoPath()) ? null : dto.getSceneVideoPath().trim());
         e.setCatagory(StrUtil.isBlank(dto.getCategory()) ? null : dto.getCategory().trim());
         e.setDifficulty(dto.getDifficulty());
         e.setStatus(dto.getStatus());
@@ -198,6 +210,7 @@ public class QuizQuestionAdminService {
         dto.setSceneImagePath(e.getSceneImagePath());
         dto.setSceneImageAlt(e.getSceneImageAlt());
         dto.setSceneCaption(e.getSceneCaption());
+        dto.setSceneVideoPath(e.getSceneVideoPath());
         dto.setCategory(e.getCatagory());
         dto.setDifficulty(e.getDifficulty());
         dto.setStatus(e.getStatus());

@@ -76,6 +76,8 @@ public class QuizStageService {
         }
         List<QuizQuestion> questions = quizQuestionMapper.selectBatchIds(unique);
         Map<Long, QuizQuestion> byId = questions.stream().collect(Collectors.toMap(QuizQuestion::getId, Function.identity()));
+        int trueFalseCount = 0;
+        int scenarioCount = 0;
         for (Long id : questionIds) {
             QuizQuestion q = byId.get(id);
             if (q == null || !stage.getModuleCode().equals(q.getModuleCode()) || q.getStatus() == null || q.getStatus() != 1) {
@@ -85,6 +87,11 @@ public class QuizStageService {
                     && (StrUtil.isBlank(q.getSceneImagePath()) || StrUtil.isBlank(q.getSceneImageAlt()))) {
                 throw new BusinessException("场景题“" + q.getTitle() + "”尚未配置题图");
             }
+            if ("TRUE_FALSE".equals(q.getQuestionType())) trueFalseCount++;
+            if ("SCENARIO_CHOICE".equals(q.getQuestionType())) scenarioCount++;
+        }
+        if ("SAFETY_KNOWLEDGE".equals(stageCode) && (trueFalseCount != 7 || scenarioCount != 7)) {
+            throw new BusinessException("第一关必须由7道判断题和7道图文场景题组成");
         }
         quizStageQuestionMapper.delete(new LambdaQueryWrapper<QuizStageQuestion>()
                 .eq(QuizStageQuestion::getStageCode, stageCode));
@@ -152,6 +159,7 @@ public class QuizStageService {
         dto.setSceneImagePath(q.getSceneImagePath());
         dto.setSceneImageAlt(q.getSceneImageAlt());
         dto.setSceneCaption(q.getSceneCaption());
+        dto.setSceneVideoPath(q.getSceneVideoPath());
         List<QuizStagePublicDTO.Option> options = new ArrayList<>();
         addOption(options, "A", q.getOptionA());
         addOption(options, "B", q.getOptionB());

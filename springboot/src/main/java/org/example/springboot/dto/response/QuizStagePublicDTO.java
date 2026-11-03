@@ -24,6 +24,7 @@ public class QuizStagePublicDTO {
         private String sceneImagePath;
         private String sceneImageAlt;
         private String sceneCaption;
+        private String sceneVideoPath;
         private List<Option> options = new ArrayList<>();
     }
 

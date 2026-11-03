@@ -176,6 +176,15 @@
             </section>
 
             <section v-else-if="currentStep === 'clues'" class="case-panel clues-panel">
+              <StoryCaseGame
+                v-if="usesInteractiveGame"
+                :key="currentCase.id"
+                :case-data="currentCase"
+                :progress="storyProgress"
+                @progress="saveInteractiveProgress"
+                @complete="finishInteractiveGame"
+              />
+              <template v-else>
               <div class="stage-title-row">
                 <div>
                   <span class="section-kicker">第一关 · 观察现场</span>
@@ -238,6 +247,7 @@
                   <i class="fa-solid fa-arrow-right" aria-hidden="true" />
                 </button>
               </div>
+              </template>
             </section>
 
             <section v-else-if="currentStep === 'reasoning'" class="case-panel reasoning-panel">
@@ -536,6 +546,7 @@ import { storyCases as fallbackStoryCases, storyChapterCatalog as fallbackStoryC
 import { useGameState } from '@/composables/useGameState'
 import { listPublishedCopperStories, saveCopperStoryProgress as saveServerStoryProgress } from '@/api/CopperContentApi'
 import { resolveMediaUrl } from '@/utils/resolveMediaUrl'
+import StoryCaseGame from '@/components/story/StoryCaseGame.vue'
 
 const bambooSlipIcon = generatedMaterialIcons['bamboo-slip-shard']
 const detectiveSuccess = generatedRewardAssets.detectiveComplete
@@ -574,7 +585,7 @@ let rewardToastTimer = null
 
 const stepItems = [
   { id: 'read', number: 1, label: '阅读' },
-  { id: 'clues', number: 2, label: '找线索' },
+  { id: 'clues', number: 2, label: '互动闯关' },
   { id: 'reasoning', number: 3, label: '推理' },
   { id: 'safety', number: 4, label: '安全' },
   { id: 'reward', number: 5, label: '奖励' }
@@ -601,7 +612,10 @@ const currentReaderPage = computed(() => currentCase.value?.pages[readerIndex.va
 const readPageCount = computed(() => storyProgress.value.readPageIds.length)
 const foundClueCount = computed(() => storyProgress.value.clueIds.length)
 const allPagesRead = computed(() => Boolean(currentCase.value) && readPageCount.value >= currentCase.value.pages.length)
-const allCluesFound = computed(() => Boolean(currentCase.value) && foundClueCount.value >= currentCase.value.clues.length)
+const usesInteractiveGame = computed(() => ['missing-bamboo', 'exam-copper-man'].includes(currentCase.value?.gameType))
+const allCluesFound = computed(() => Boolean(currentCase.value) && (usesInteractiveGame.value
+  ? Boolean(storyProgress.value.interactiveComplete)
+  : foundClueCount.value >= currentCase.value.clues.length))
 const reasoningCorrect = computed(() => currentCase.value?.reasoning.options.some((option) => option.id === storyProgress.value.reasoningAnswerId && option.correct) || false)
 const safetyCorrect = computed(() => currentCase.value?.safety.options.some((option) => option.id === storyProgress.value.safetyAnswerId && option.correct) || false)
 const evidenceOrder = computed(() => storyProgress.value.evidenceOrder || [])
@@ -624,10 +638,10 @@ const objectives = computed(() => [
   },
   {
     id: 'clues',
-    name: `找出${currentCase.value?.clues.length || 0}条线索`,
-    description: '点击调查现场',
-    progress: foundClueCount.value,
-    total: currentCase.value?.clues.length || 0,
+    name: usesInteractiveGame.value ? '完成互动调查' : `找出${currentCase.value?.clues.length || 0}条线索`,
+    description: usesInteractiveGame.value ? '完成观察、归位或拼图' : '点击调查现场',
+    progress: usesInteractiveGame.value ? (allCluesFound.value ? 1 : 0) : foundClueCount.value,
+    total: usesInteractiveGame.value ? 1 : (currentCase.value?.clues.length || 0),
     done: allCluesFound.value,
     icon: 'fa-solid fa-fingerprint'
   },
@@ -813,6 +827,19 @@ function startReasoning() {
   clearFeedback()
 }
 
+function saveInteractiveProgress(patch) {
+  saveStoryProgress(activeCaseId.value, patch)
+}
+
+function finishInteractiveGame(patch = {}) {
+  const clueIds = currentCase.value.clues.map((clue) => clue.id)
+  saveStoryProgress(activeCaseId.value, { ...patch, clueIds, interactiveComplete: true })
+  updateMilestoneStars()
+  currentStep.value = 'reasoning'
+  clearFeedback()
+  message.success('互动调查完成！现在用证据回答案件问题。')
+}
+
 function toggleEvidence(clueId) {
   const current = evidenceOrder.value
   const next = current.includes(clueId)
@@ -918,6 +945,24 @@ async function finishCase() {
 }
 
 function replayCase() {
+  saveStoryProgress(activeCaseId.value, {
+    clueIds: [],
+    evidenceOrder: [],
+    differenceIds: [],
+    wrongDifferenceCount: 0,
+    bonusEvidenceIds: [],
+    sequenceSlotIds: [],
+    revealStage: 0,
+    windOrder: [],
+    puzzlePieceIds: [],
+    acupointPlacementIds: [],
+    interactivePhase: null,
+    interactiveComplete: false,
+    reasoningAnswerId: null,
+    safetyAnswerId: null,
+    startedAt: null,
+    elapsedSeconds: 0
+  })
   result.value = null
   currentStep.value = 'read'
   readerIndex.value = 0
@@ -962,11 +1007,13 @@ function goMap() {
 }
 
 function normalizePublishedStory(story, index) {
+  const localEnhancement = fallbackStoryCases.find((item) => item.id === story.storyCode) || {}
   const cover = resolveMediaUrl(story.coverPath || story.pages?.[0]?.image || '')
   const reasoningOptions = story.reasoning?.options || []
   const safetyOptions = story.safety?.options || []
   const cluePositions = [{ left: 17, top: 22 }, { left: 72, top: 28 }, { left: 31, top: 74 }, { left: 82, top: 70 }]
   return {
+    ...localEnhancement,
     ...story,
     id: story.storyCode,
     number: ['一', '二', '三', '四', '五', '六'][index] || String(index + 1),
@@ -975,6 +1022,13 @@ function normalizePublishedStory(story, index) {
     sceneImage: cover,
     guideImage: detectiveGuide,
     available: true,
+    gameType: story.gameType || localEnhancement.gameType,
+    ageModes: story.ageModes || localEnhancement.ageModes,
+    spotDifference: story.spotDifference || localEnhancement.spotDifference,
+    evidenceSequence: story.evidenceSequence || localEnhancement.evidenceSequence,
+    progressiveReveal: story.progressiveReveal || localEnhancement.progressiveReveal,
+    puzzle: story.puzzle || localEnhancement.puzzle,
+    knowledgeCards: story.knowledgeCards || localEnhancement.knowledgeCards,
     pages: (story.pages || []).map((page, pageIndex) => ({
       ...page,
       id: page.id || `scene-${pageIndex + 1}`,

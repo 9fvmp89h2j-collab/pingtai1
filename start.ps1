@@ -485,8 +485,12 @@ Write-Host '按 Ctrl+C 或关闭窗口停止所有服务' -ForegroundColor Yello
 
 # 自动打开浏览器
 Start-Sleep -Seconds 2
-Start-Process 'http://127.0.0.1:8800/#/home-map'
-Write-OK '已自动打开浏览器'
+try {
+    Start-Process 'http://127.0.0.1:8800/#/home-map' -ErrorAction Stop
+    Write-OK '已自动打开浏览器'
+} catch {
+    Write-Warn "无法自动打开浏览器，请手动访问 http://127.0.0.1:8800/#/home-map"
+}
 
 # ---- 监控进程 ----
 while ($true) {

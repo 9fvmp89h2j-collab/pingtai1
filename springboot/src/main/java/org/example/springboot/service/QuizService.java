@@ -72,7 +72,7 @@ public class QuizService {
         if (q == null) {
             throw new BusinessException("题目不存在");
         }
-        if (q.getStatus() != null && q.getStatus() == 0) {
+        if (q.getStatus() != null && q.getStatus() != 1) {
             throw new BusinessException("该题目已禁用");
         }
         String userLetter = normalizeUserLetter(userAnswerRaw);
@@ -183,7 +183,7 @@ public class QuizService {
         if (q == null) {
             throw new BusinessException("题目不存在");
         }
-        if (q.getStatus() != null && q.getStatus() == 0) {
+        if (q.getStatus() != null && q.getStatus() != 1) {
             throw new BusinessException("该题目已禁用");
         }
         String userLetter = normalizeUserLetter(userAnswerRaw);

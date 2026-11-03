@@ -43,3 +43,24 @@
 ## Final Result
 
 final result: passed
+
+## 3D 小铜人馆界面优化（2026-09-09）
+
+### 变更范围
+
+- 参考图：`D:/总/Pediatric Acupuncture Education System/预览/3d铜人馆.png`（1672×941）。
+- 实现页面：`src/views/frontend/CopperMan.vue`（路由 `/#/copper-man`）。
+- 保留现有 3D 模型、旋转/缩放、星点点击、任务收集、奖励、穴位图鉴和安全提示逻辑。
+- 新增右栏“症状推荐穴位”入口，并将页面重排为桌面三栏工作区，补充移动端纵向适配。
+
+### 自动化验证
+
+- `npm run lint`：通过。
+- `npm run build`：通过。
+
+### 浏览器验证状态
+
+- 当前环境缺少 Playwright Chromium 可执行文件，无法完成截图、交互和控制台检查。
+- 因此本次视觉 QA 结果为 `blocked`，需要在具备浏览器运行时的环境中复核桌面 1672×941 与移动 390×844 两个视口。
+
+final result: blocked

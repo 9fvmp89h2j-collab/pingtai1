@@ -22,7 +22,8 @@ export const adminNavigation = [
       { key: 'xuewei', label: '小铜人内容中心', path: '/back/xuewei', icon: 'fas fa-location-dot' },
       { key: 'train-game', label: '小火车关卡', path: '/back/train-game', icon: 'fas fa-train' },
       { key: 'mainline-level', label: '主线关卡', path: '/back/mainline-level', icon: 'fas fa-map-marked-alt' },
-      { key: 'quiz-question', label: '题库', path: '/back/quiz-question', icon: 'fas fa-clipboard-list' }
+      { key: 'quiz-question', label: '题库', path: '/back/quiz-question', icon: 'fas fa-clipboard-list' },
+      { key: 'safety-game-config', label: '安全守护案配置', path: '/back/safety-game-config', icon: 'fas fa-shield-heart' }
     ]
   },
   {

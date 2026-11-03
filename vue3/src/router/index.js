@@ -19,6 +19,7 @@ export const backendRoutes = [
       { path: 'train-game', name: 'TrainGameManagement', component: () => import('@/views/backend/train-game/index.vue'), meta: { title: '小火车关卡管理', icon: 'BookOutlined' } },
       { path: 'xuewei', name: 'XueweiManagement', component: () => import('@/views/backend/xuewei/index.vue'), meta: { title: '小铜人内容中心', icon: 'BookOutlined' } },
       { path: 'quiz-question', name: 'QuizQuestionManagement', component: () => import('@/views/backend/quiz-question/index.vue'), meta: { title: '题库管理', icon: 'BookOutlined' } },
+      { path: 'safety-game-config', name: 'SafetyGameConfigManagement', component: () => import('@/views/backend/safety-game-config/index.vue'), meta: { title: '安全守护案配置', icon: 'SafetyCertificateOutlined' } },
       { path: 'community-post', name: 'CommunityPostManagement', component: () => import('@/views/backend/community-post/index.vue'), meta: { title: '帖子管理', icon: 'BookOutlined' } },
       { path: 'community-comment', name: 'CommunityCommentManagement', component: () => import('@/views/backend/community-comment/index.vue'), meta: { title: '评论管理', icon: 'BookOutlined' } },
       { path: 'community-feedback', name: 'CommunityFeedbackManagement', component: () => import('@/views/backend/community-feedback/index.vue'), meta: { title: '反馈消息', icon: 'BookOutlined' } },

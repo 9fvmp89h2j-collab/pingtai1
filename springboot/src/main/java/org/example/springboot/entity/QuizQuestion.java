@@ -56,6 +56,9 @@ public class QuizQuestion {
     @TableField("scene_caption")
     private String sceneCaption;
 
+    @TableField("scene_video_path")
+    private String sceneVideoPath;
+
     /** 对应库字段 category */
     @TableField("category")
     private String catagory;
